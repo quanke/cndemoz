@@ -1,0 +1,434 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="全科-不安分的码农">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://quanke.name">
+    <!--SEO-->
+
+
+
+
+
+<meta name="robots" content="all" />
+<meta name="google" content="all" />
+<meta name="googlebot" content="all" />
+<meta name="verify" content="all" />
+    <!--Title-->
+
+
+<title>使用Spring Boot和Kotlin创建RESTfull API | 全科-不安分的码农</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="全科-不安分的码农" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
+<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?853906ed403c461b2dbf1df696bdf998";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+	<script>
+		(function(i, s, o, g, r, a, m) {
+		    i['GoogleAnalyticsObject'] = r;
+		    i[r] = i[r] || function() {
+		        (i[r].q = i[r].q || []).push(arguments)
+		    }, i[r].l = 1 * new Date();
+		    a = s.createElement(o),
+		    m = s.getElementsByTagName(o)[0];
+		    a.async = 1;
+		    a.src = g;
+		    m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-82833335-5', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+
+    
+</head>
+
+
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header"  style="background-image:url(http://7xpw2b.com1.z0.glb.clouddn.com/hexo-sinppet/img/banner2.jpg)"  >
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="">
+            <img src="/img/avatar.jpg" alt="logo头像">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                 <img src="/img/branding.png" alt="Snippet 博客主题">  
+             
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                    </span>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>主页</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/free-books"><i class="fa fa-fw "></i>开源书籍</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>应用</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>开源</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="使用Spring Boot和Kotlin创建RESTfull API">
+            
+	            使用Spring Boot和Kotlin创建RESTfull API
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>Spring Boot与kotlin实战</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            kotlin
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2018/02/03</span>
+    </span>
+</div>
+
+            
+            
+    </div>
+    
+    <div class="post-body post-content">
+        <p>使用<code>Kotlin</code> 结合<code>SpringBoot</code> 开发一个<code>RESTFul</code>版本的 <code>Hello World</code>。</p>
+<p>如果单单Kotlin 我是不相信在短时间内有产生多大的风波，但是如果Kotlin​ 能和 Java 开发神器  SpringBoot 结合起来，我感觉能飞。。。</p>
+<h4 id="1-首先新建Gradle的Kotlin工程"><a href="#1-首先新建Gradle的Kotlin工程" class="headerlink" title="1.首先新建Gradle的Kotlin工程"></a>1.首先新建<code>Gradle</code>的<code>Kotlin</code>工程</h4><p>打开IDEA ，File-&gt;New-&gt;Project</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/432952-cc8db2c5f2828026?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="New-&gt;Project "></p>
+<p>输入相关信息之后下一步：</p>
+<p>一般<code>GroupId</code>为公司域名反着写，加上项目名字</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/432952-b622a516a2536b20?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>建议选中 <code>Use auto-import</code>，自动导包 ,使用本地 <code>Gradle</code>，但是需要先安装Gradle（<a href="https://gradle.org/install/" target="_blank" rel="external">https://gradle.org/install/</a>）</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/432952-0864d5a15edb38e4?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Use auto-import"></p>
+<p>如果没有选择 使用本地 Gradle 项目创建完成之后Gradle的包需要下载，这个时间有点长，以前做Android就深受其苦，所有要做好心理准备，除非你有一个好用的FQ工具。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/432952-091572e29e61e6e9?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Gradle 库下载中"></p>
+<p>项目创建完成之后会生成一个<code>Gradle</code>文件<code>build.gradle</code>和<code>settings.gradle</code>,<code>settings.gradle</code>文件我们暂且不管，先看看<code>build.gradle</code>文件：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">group &apos;name.quanke.kotlin.restful&apos;</div><div class="line"></div><div class="line">version &apos;1.0-SNAPSHOT&apos;</div><div class="line"></div><div class="line">buildscript &#123;</div><div class="line"></div><div class="line">ext.kotlin_version = &apos;1.2.10&apos;</div><div class="line"></div><div class="line">repositories &#123;</div><div class="line"></div><div class="line">mavenCentral()</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line"></div><div class="line">classpath &quot;org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version&quot;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">apply plugin: &apos;kotlin&apos;</div><div class="line"></div><div class="line">repositories &#123;</div><div class="line"></div><div class="line">mavenCentral()</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line"></div><div class="line">compile &quot;org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version&quot;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">compileKotlin &#123;</div><div class="line"></div><div class="line">kotlinOptions.jvmTarget = &quot;1.8&quot;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">compileTestKotlin &#123;</div><div class="line"></div><div class="line">kotlinOptions.jvmTarget = &quot;1.8&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/432952-4d6051227095b1a9?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="下载Gradle 依赖"></p>
+<blockquote>
+<p>下载依赖和插件也是一个漫长痛苦的过程。各位不要心急，慢慢来，一次不行多试几次。</p>
+</blockquote>
+<p>从生成的配置文件看，<code>IDEA</code>已经自动把<code>Gradle</code>构建<code>Kotlin</code>工程插件<code>kotlin-gradle-plugin</code>，以及<code>Kotlin</code></p>
+<p>标准库<code>kotlin-stdlib</code>添加到<code>build.gradle</code>文件中了。</p>
+<h4 id="2-配置build-gradle文件"><a href="#2-配置build-gradle文件" class="headerlink" title="2.配置build.gradle文件"></a>2.配置<code>build.gradle</code>文件</h4><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">group &apos;name.quanke.kotlin.rest&apos;</div><div class="line"></div><div class="line">version &apos;1.0-SNAPSHOT&apos;</div><div class="line"></div><div class="line">buildscript &#123;</div><div class="line"></div><div class="line">ext.kotlin_version = &apos;1.2.10&apos;</div><div class="line"></div><div class="line">ext.spring_boot_version = &apos;1.5.4.RELEASE&apos;</div><div class="line"></div><div class="line">repositories &#123;</div><div class="line"></div><div class="line">mavenCentral()</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line"></div><div class="line">classpath &quot;org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version&quot;</div><div class="line"></div><div class="line">classpath &quot;org.jetbrains.kotlin:kotlin-allopen:$kotlin_version&quot; // See https://kotlinlang.org/docs/reference/compiler-plugins.html#kotlin-spring-compiler-plugin</div><div class="line"></div><div class="line">// org.jetbrains.kotlin:kotlin-allopen 是全开放编译器插件。我们使用Kotlin 调用Java的Spring AOP框架和库，需要类为 open（可被继承实现），而Kotlin 类和函数都是默认 final 的，这样我们需要为每个类和函数前面加上open修饰符。</div><div class="line"></div><div class="line">// 这样的代码写起来，可费事了。还好，我们有all-open 编译器插件。它会适配 Kotlin 以满足这些框架的需求，并使用指定的注解标注类而其成员无需显式使用 open 关键字打开。 例如，当我们使用 Spring 时，就不需要打开所有的类，跟我们在Java中写代码一样，只需要用相应的注解标注即可。</div><div class="line"></div><div class="line">classpath &quot;org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version&quot;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">apply plugin: &apos;kotlin&apos;</div><div class="line"></div><div class="line">apply plugin: &quot;kotlin-spring&quot; // See https://kotlinlang.org/docs/reference/compiler-plugins.html#kotlin-spring-compiler-plugin</div><div class="line"></div><div class="line">apply plugin: &apos;org.springframework.boot&apos;</div><div class="line"></div><div class="line">jar &#123;</div><div class="line"></div><div class="line">baseName = &apos;0_2RestfulApi-service&apos;</div><div class="line"></div><div class="line">version = &apos;0.1.0&apos;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">repositories &#123;</div><div class="line"></div><div class="line">mavenCentral()</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line"></div><div class="line">compile &quot;org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version&quot;</div><div class="line"></div><div class="line">compile &apos;org.springframework.boot:spring-boot-starter-web&apos;</div><div class="line"></div><div class="line">testCompile(&apos;org.springframework.boot:spring-boot-starter-test&apos;)</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">compileKotlin &#123;</div><div class="line"></div><div class="line">kotlinOptions.jvmTarget = &quot;1.8&quot;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">compileTestKotlin &#123;</div><div class="line"></div><div class="line">kotlinOptions.jvmTarget = &quot;1.8&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-创建包"><a href="#3-创建包" class="headerlink" title="3.创建包"></a>3.创建包</h4><p>在kotlin目录下面创建：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">name.quanke.kotlin.rest</div></pre></td></tr></table></figure></p>
+<p>注意：不能直接在kotlin目录下面写Application 类，不然会报错<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Your ApplicationContext is unlikely to start due to a @ComponentScan of the default package</div></pre></td></tr></table></figure></p>
+<p>3.创建数据模型Greeting类：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">package name.quanke.kotlin.rest</div><div class="line"></div><div class="line">/**</div><div class="line"></div><div class="line">* Created by http://quanke.name on 2018/1/9.</div><div class="line"></div><div class="line">*/</div><div class="line"></div><div class="line">data class Greeting(val id: Long, val content: String)</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>如果是Java写的话，想象一下这需要多少行代码，看看kotlin，不明则厉。。。</p>
+</blockquote>
+<h4 id="5-创建GreetingController"><a href="#5-创建GreetingController" class="headerlink" title="5.创建GreetingController"></a>5.创建GreetingController</h4><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">package name.quanke.kotlin.rest</div><div class="line"></div><div class="line">import org.springframework.web.bind.annotation.GetMapping</div><div class="line"></div><div class="line">import org.springframework.web.bind.annotation.RequestParam</div><div class="line"></div><div class="line">import org.springframework.web.bind.annotation.RestController</div><div class="line"></div><div class="line">import java.util.concurrent.atomic.AtomicLong</div><div class="line"></div><div class="line">/**</div><div class="line"></div><div class="line">* Created by http://quanke.name on 2018/1/9.</div><div class="line"></div><div class="line">*/</div><div class="line"></div><div class="line">@RestController</div><div class="line"></div><div class="line">class GreetingController &#123;</div><div class="line"></div><div class="line">val counter = AtomicLong()</div><div class="line"></div><div class="line">@GetMapping(&quot;/greeting&quot;)</div><div class="line"></div><div class="line">fun greeting(@RequestParam(value = &quot;name&quot;, defaultValue = &quot;World&quot;) name: String) =</div><div class="line"></div><div class="line">Greeting(counter.incrementAndGet(), &quot;Hello, $name&quot;)</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="6-创建Application"><a href="#6-创建Application" class="headerlink" title="6.创建Application"></a>6.创建<code>Application</code></h4><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">package name.quanke.kotlin.rest</div><div class="line"></div><div class="line">import org.springframework.boot.SpringApplication</div><div class="line"></div><div class="line">import org.springframework.boot.autoconfigure.SpringBootApplication</div><div class="line"></div><div class="line">/**</div><div class="line"></div><div class="line">* Created by http://quanke.name on 2018/1/9.</div><div class="line"></div><div class="line">*/</div><div class="line"></div><div class="line">@SpringBootApplication</div><div class="line"></div><div class="line">class Application</div><div class="line"></div><div class="line">fun main(args: Array&lt;String&gt;) &#123;</div><div class="line"></div><div class="line">SpringApplication.run(Application::class.java, *args)</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>点击Gradle的bootRun：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/432952-056fdad69b06e79c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="bootRun"></p>
+<p>或者点击</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/432952-a0534039b6e2e494?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Run"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/432952-ba09f7c75789f836?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="运行成功的样子"></p>
+<p>如果没有毛病，访问</p>
+<p><a href="http://127.0.0.1:8080/greeting?name=quanke.name" target="_blank" rel="external">http://127.0.0.1:8080/greeting?name=quanke.name</a></p>
+<p>输出：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/432952-cddd8ac0605ea11b?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>那么恭喜你，一个kotlin 和spring boot的web服务就这么搞定了。。。</p>
+<p>服务默认是8080端口，如果8080端口刚好被占用了，那在resources目录下新建一个application.yml文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">server:</div><div class="line">  port: 1234</div></pre></td></tr></table></figure>
+<p>把端口改成你想要的。</p>
+<p>当然这只是开始的演示，么有什么卵用。。。之后可以用于生产的demo，呼之欲出。</p>
+<p>欢迎关注：</p>
+<p><a href="http://quanke.name/spring-boot-with-kotlin-in-action">《Spring Boot in kotlin 实战》</a></p>
+
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">quanke.name</a>
+            
+        </div>
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/posts/15187/" class="pre-post btn btn-default"><i class="fa fa-angle-left fa-fw"></i>上一篇</a>
+    
+    
+        <a href="/posts/41862/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+	
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMzY4OS8xMDI0NA==">
+  <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+         if (typeof LivereTower === 'function') { return; }
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+  </script>
+</div>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">    
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢?">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget notification">
+        <h3 class="title">网站公告</h3>
+        <div>
+            <p>《Spring Boot 与 kotlin 实战》 系列教程上线<br/>
+专题：<a href="http://quanke.name/spring-boot-with-kotlin-in-action" title="fork me" target="_blank">《Spring Boot 与 kotlin 实战》</a> <br/>
+<hr>
+<img  width="100%" align="center" src="https://static.oschina.net/uploads/img/201711/08183543_ysUa.jpg">
+<hr>
+QQ交流群：370156529
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/quanke" rel="external nofollow" title="Github" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:caiquanke_88@163.com" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="//weibo.com/quankecai" rel="external nofollow" title="微博" target="_blank">
+			    	<i class="weibo fa fa-weibo"></i>
+			    </a>
+            
+	            <a href="//jq.qq.com/?_wv=1027&k=5MOKtIE" rel="external nofollow" title="QQ群" target="_blank">
+			    	<i class="users fa fa-users"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/es/"><i class="fa" aria-hidden="true">Elasticsearch</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/golang/"><i class="fa" aria-hidden="true">Go语言</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MBaaS-LiveOak系列/"><i class="fa" aria-hidden="true">MBaaS-LiveOak系列</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/rn/"><i class="fa" aria-hidden="true">React Native</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-Boot与kotlin实战/"><i class="fa" aria-hidden="true">Spring Boot与kotlin实战</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vertx/"><i class="fa" aria-hidden="true">Vert.x3 系列</i></a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/"><i class="fa" aria-hidden="true">android开发</i></a><span class="category-list-count">54</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/"><i class="fa" aria-hidden="true">git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ios/"><i class="fa" aria-hidden="true">ios开发</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/"><i class="fa" aria-hidden="true">node.js</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/use/"><i class="fa" aria-hidden="true">使用</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/bdata/"><i class="fa" aria-hidden="true">大数据</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/service/"><i class="fa" aria-hidden="true">服务端开发</i></a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/autotest/"><i class="fa" aria-hidden="true">自动化测试</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gof/"><i class="fa" aria-hidden="true">设计模式</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/se/"><i class="fa" aria-hidden="true">软件工程</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/essay/"><i class="fa" aria-hidden="true">随笔</i></a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/project/"><i class="fa" aria-hidden="true">项目实战</i></a><span class="category-list-count">1</span></li></ul>
+    </div>
+
+
+        
+        
+    <div class="widget">
+      <h3 class="title">归档</h3>
+        <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/"><i class="fa" aria-hidden="true">二月 2018</i></a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">十二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/"><i class="fa" aria-hidden="true">十一月 2017</i></a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/"><i class="fa" aria-hidden="true">二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/"><i class="fa" aria-hidden="true">十月 2016</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/"><i class="fa" aria-hidden="true">七月 2016</i></a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/"><i class="fa" aria-hidden="true">五月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/"><i class="fa" aria-hidden="true">四月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/"><i class="fa" aria-hidden="true">一月 2016</i></a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/"><i class="fa" aria-hidden="true">八月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/"><i class="fa" aria-hidden="true">七月 2015</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/"><i class="fa" aria-hidden="true">五月 2015</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/"><i class="fa" aria-hidden="true">四月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/"><i class="fa" aria-hidden="true">十一月 2014</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/"><i class="fa" aria-hidden="true">六月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/"><i class="fa" aria-hidden="true">二月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/"><i class="fa" aria-hidden="true">一月 2013</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/"><i class="fa" aria-hidden="true">十二月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/"><i class="fa" aria-hidden="true">十一月 2012</i></a><span class="archive-list-count">40</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/"><i class="fa" aria-hidden="true">十月 2012</i></a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/"><i class="fa" aria-hidden="true">九月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/"><i class="fa" aria-hidden="true">八月 2012</i></a><span class="archive-list-count">4</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        <a href="/tags/API/" style="font-size: 13.33px;">API</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/android-pg/" style="font-size: 10px;">Android多渠道打包</a> <a href="/tags/es/" style="font-size: 16.67px;">Elasticsearch</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IOS/" style="font-size: 10px;">IOS</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/th-java/" style="font-size: 10px;">Java 编程思想</a> <a href="/tags/JavaEE/" style="font-size: 10px;">JavaEE</a> <a href="/tags/LiveOak/" style="font-size: 13.33px;">LiveOak</a> <a href="/tags/MBaaS/" style="font-size: 15px;">MBaaS</a> <a href="/tags/PM2/" style="font-size: 10px;">PM2</a> <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/rn/" style="font-size: 10px;">React Native</a> <a href="/tags/SDK/" style="font-size: 10px;">SDK</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/vertx-for-java/" style="font-size: 10px;">Vert.x Core手册 for Java</a> <a href="/tags/Vert-x3/" style="font-size: 20px;">Vert.x3</a> <a href="/tags/Vertx/" style="font-size: 20px;">Vertx</a> <a href="/tags/windows-install/" style="font-size: 10px;">Windows10安装</a> <a href="/tags/android/" style="font-size: 18.33px;">android</a> <a href="/tags/android-a/" style="font-size: 10px;">android动画</a> <a href="/tags/elasticsearch/" style="font-size: 11.67px;">elasticsearch</a> <a href="/tags/gitbook/" style="font-size: 10px;">gitbook</a> <a href="/tags/ios/" style="font-size: 10px;">ios</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/kotlin/" style="font-size: 15px;">kotlin</a> <a href="/tags/logstash/" style="font-size: 11.67px;">logstash</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node-js-运行/" style="font-size: 10px;">node.js 运行</a> <a href="/tags/spirng-boot/" style="font-size: 10px;">spirng boot</a> <a href="/tags/spring-boot/" style="font-size: 15px;">spring boot</a> <a href="/tags/swagger-ui/" style="font-size: 10px;">swagger ui</a> <a href="/tags/swagger-api/" style="font-size: 10px;">swagger-api</a> <a href="/tags/swagger-edit/" style="font-size: 10px;">swagger-edit</a> <a href="/tags/bdaga/" style="font-size: 16.67px;">大数据</a> <a href="/tags/opensouce/" style="font-size: 10px;">开源</a> <a href="/tags/conclusion/" style="font-size: 10px;">总结</a> <a href="/tags/api/" style="font-size: 10px;">接口文档</a> <a href="/tags/careful/" style="font-size: 10px;">注意</a> <a href="/tags/career-planning/" style="font-size: 10px;">职业规划</a> <a href="/tags/autotest/" style="font-size: 10px;">自动化测试</a> <a href="/tags/gof/" style="font-size: 10px;">设计模式</a> <a href="/tags/data/" style="font-size: 11.67px;">资料</a> <a href="/tags/test/" style="font-size: 10px;">软件测试</a>
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://quanke.name" class="fa" target="_blank">我全科博客</a>
+        
+            <a href="http://satra.gitee.io/blog/" class="fa" target="_blank">我在万达摆地摊</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12"> 
+                <span>Copyright &copy; 2017
+                </span> | 
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> | 
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+	<script src="/js/search.js?rev=@@hash"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+
+</body>
+</html>

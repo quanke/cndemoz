@@ -1,0 +1,473 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="全科-不安分的码农">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://quanke.name">
+    <!--SEO-->
+
+
+
+
+
+<meta name="robots" content="all" />
+<meta name="google" content="all" />
+<meta name="googlebot" content="all" />
+<meta name="verify" content="all" />
+    <!--Title-->
+
+
+<title>Web服务器处理HTTP压缩之gzip、deflate压缩 | 全科-不安分的码农</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="全科-不安分的码农" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
+<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?853906ed403c461b2dbf1df696bdf998";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+	<script>
+		(function(i, s, o, g, r, a, m) {
+		    i['GoogleAnalyticsObject'] = r;
+		    i[r] = i[r] || function() {
+		        (i[r].q = i[r].q || []).push(arguments)
+		    }, i[r].l = 1 * new Date();
+		    a = s.createElement(o),
+		    m = s.getElementsByTagName(o)[0];
+		    a.async = 1;
+		    a.src = g;
+		    m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-82833335-5', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+
+    
+</head>
+
+
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header"  style="background-image:url(http://7xpw2b.com1.z0.glb.clouddn.com/hexo-sinppet/img/banner2.jpg)"  >
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="">
+            <img src="/img/avatar.jpg" alt="logo头像">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                 <img src="/img/branding.png" alt="Snippet 博客主题">  
+             
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                    </span>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>主页</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/free-books"><i class="fa fa-fw "></i>开源书籍</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>应用</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>开源</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Web服务器处理HTTP压缩之gzip、deflate压缩">
+            
+	            Web服务器处理HTTP压缩之gzip、deflate压缩
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>Vert.x3 系列</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            Vert.x3
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2016/05/01</span>
+    </span>
+</div>
+
+            
+            
+            <p class="fa fa-exclamation-triangle warning">
+                本文于<strong>642</strong>天之前发表，文中内容可能已经过时。
+            </p>
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <ul>
+<li>欢迎关注<a href="http://quanke.name/">http://quanke.name/</a></li>
+<li>交流群：<code>231419585</code></li>
+<li>转载请注明出处，谢谢</li>
+</ul>
+<h3 id="一、什么是gzip"><a href="#一、什么是gzip" class="headerlink" title="一、什么是gzip"></a>一、什么是gzip</h3><p>gzip是一种数据格式，默认且目前仅使用deflate算法压缩data部分；</p>
+<p>Gzip是一种流行的文件压缩算法，现在的应用十分广泛，尤其是在Linux平台。当应用Gzip压缩到一个纯文本文件时，效果是非常明显的，大约可以减少70％以上的文件大小。这取决于文件中的内容。</p>
+<p>利用Apache中的Gzip模块，我们可以使用Gzip压缩算法来对Apache服务器发布的网页内容进行压缩后再传输到客户端浏览器。这样经过压缩后实际上降低了网络传输的字节数，最明显的好处就是可以加快网页加载的速度。</p>
+<p>网页加载速度加快的好处不言而喻，除了节省流量，改善用户的浏览体验外，另一个潜在的好处是Gzip与搜索引擎的抓取工具有着更好的关系。例如 Google就可以通过直接读取gzip文件来比普通手工抓取更快地检索网页。在Google网站管理员工具（Google Webmaster Tools）中你可以看到，sitemap.xml.gz 是直接作为Sitemap被提交的。</p>
+<p>而这些好处并不仅仅限于静态内容，PHP动态页面和其他动态生成的内容均可以通过使用Apache压缩模块压缩，加上其他的性能调整机制和相应的服务器端 缓存规则，这可以大大提高网站的性能。因此，对于部署在Linux服务器上的PHP程序，在服务器支持的情况下，我们建议你开启使用Gzip Web压缩。</p>
+<p>PS：详情参考：<a href="http://baike.baidu.com/item/gzip?fr=aladdin" target="_blank" rel="external">http://baike.baidu.com/item/gzip?fr=aladdin</a></p>
+<h3 id="二、什么是deflate"><a href="#二、什么是deflate" class="headerlink" title="二、什么是deflate"></a>二、什么是deflate</h3><p>DEFLATE是同时使用了LZ77算法与哈夫曼编码（Huffman Coding）的一个无损数据压缩算法。</p>
+<p>它最初是由Phil Katz为他的PKZIP归档工具第二版所定义的，后来定义在RFC 1951规范中。</p>
+<p>人们普遍认为DEFLATE不受任何专利所制约，并且在LZW（GIF文件格式使用）相关的专利失效之前，这种格式除了在ZIP文件格式中得到应用之外也在gzip压缩文件以及PNG图像文件中得到了应用。</p>
+<p>DEFLATE压缩与解压的源代码可以在自由、通用的压缩库zlib上找到。</p>
+<p>更高压缩率的DEFLATE是7-zip所实现的。AdvanceCOMP也使用这种实现，它可以对gzip、PNG、MNG以及ZIP文件进行压缩从而得到比zlib更小的文件大小。在Ken Silverman的KZIP与PNGOUT中使用了一种更加高效同时要求更多用户输入的DEFLATE程序。</p>
+<p>deflate是一种压缩算法,是huffman编码的一种加强。</p>
+<p>deflate与gzip解压的代码几乎相同，可以合成一块代码。</p>
+<h3 id="三、web服务器处理http压缩的过程"><a href="#三、web服务器处理http压缩的过程" class="headerlink" title="三、web服务器处理http压缩的过程"></a>三、web服务器处理http压缩的过程</h3><ol>
+<li>Web服务器接收到浏览器的HTTP请求后，检查浏览器是否支持HTTP压缩（Accept-Encoding 信息）；</li>
+<li>如果浏览器支持HTTP压缩，Web服务器检查请求文件的后缀名；</li>
+<li>如果请求文件是HTML、CSS等静态文件，Web服务器到压缩缓冲目录中检查是否已经存在请求文件的最新压缩文件；</li>
+<li>如果请求文件的压缩文件不存在，Web服务器向浏览器返回未压缩的请求文件，并在压缩缓冲目录中存放请求文件的压缩文件；</li>
+<li>如果请求文件的最新压缩文件已经存在，则直接返回请求文件的压缩文件；</li>
+<li>如果请求文件是动态文件，Web服务器动态压缩内容并返回浏览器，压缩内容不存放到压缩缓存目录中。</li>
+</ol>
+<p>下面是两个演示图：<br>未使用Gzip：</p>
+<p><img src="http://static.oschina.net/uploads/space/2014/1113/001348_R3PV_560358.png" alt="image"></p>
+<p>开启使用Gzip后：</p>
+<p><img src="http://static.oschina.net/uploads/space/2014/1113/001403_CZ4O_560358.png" alt="image"></p>
+<h3 id="四、gzip与deflate区别"><a href="#四、gzip与deflate区别" class="headerlink" title="四、gzip与deflate区别"></a>四、gzip与deflate区别</h3><p>deflate使用inflateInit()，而gzip使用inflateInit2()进行初始化，比 inflateInit()多一个参数: -MAX_WBITS，表示处理raw deflate数据。因为gzip数据中的zlib压缩数据块没有zlib header的两个字节。使用inflateInit2时要求zlib库忽略zlib header。在zlib手册中要求windowBits为8..15，但是实际上其它范围的数据有特殊作用，见zlib.h中的注释，如负数表示raw deflate。        </p>
+<p>Apache的deflate变种可能也没有zlib header，需要添加假头后处理。即MS的错误deflate (raw deflate).zlib头第1字节一般是0x78, 第2字节与第一字节合起来的双字节应能被31整除，详见rfc1950。例如Firefox的zlib假头为0x7801，python zlib.compress()结果头部为0x789c。        </p>
+<p>deflate 是最基础的算法，gzip 在 deflate 的 raw data 前增加了 10 个字节的 gzheader，尾部添加了 8 个字节的校验字节（可选 crc32 和 adler32） 和长度标识字节。</p>
+<p>安装它们的Apache Web服务器版本的差异。Apache 1.x系列没有内建网页压缩技术，所以才去用额外的第三方mod_gzip 模块来执行压缩。而Apache 2.x官方在开发的时候，就把网页压缩考虑进去，内建了mod_deflate 这个模块，用以取代mod_gzip。虽然两者都是使用的Gzip压缩算法，它们的运作原理是类似的。     </p>
+<p>压缩质量。mod_deflate 压缩速度略快而mod_gzip 的压缩比略高。一般默认情况下，mod_gzip 会比mod_deflate 多出4%~6％的压缩量。</p>
+<p>对服务器资源的占用。 一般来说mod_gzip 对服务器CPU的占用要高一些。mod_deflate 是专门为确保服务器的性能而使用的一个压缩模块，mod_deflate 需要较少的资源来压缩文件。这意味着在高流量的服务器，使用mod_deflate 可能会比mod_gzip 加载速度更快。即在服务器性能足够的情况下，使用mod_gzip，虽然会耗费服务器性能，但是值得（压缩更快更好）；在服务器性能不足的情况下，使用mod_deflate 确保性能。</p>
+<p>从Apache 2.0.45开始，mod_deflate 可使用DeflateCompressionLevel 指令来设置压缩级别。该指令的值可为1（压缩速度最快，最低的压缩质量）至9（最慢的压缩速度，压缩率最高）之间的整数，其默认值为6（压缩速度和压缩质 量较为平衡的值）。这个简单的变化更是使得mod_deflate 可以轻松媲美mod_gzip 的压缩。</p>
+<h3 id="五、开启mod-gzip、mod-deflate"><a href="#五、开启mod-gzip、mod-deflate" class="headerlink" title="五、开启mod_gzip、mod_deflate"></a>五、开启mod_gzip、mod_deflate</h3><p>Apache上利用Gzip压缩算法进行压缩的模块有两种：mod_gzip 和mod_deflate。 要使用Gzip Web压缩，请首先确定你的服务器开启了对这两个组件之一的支持。在Linux服务器上，现在已经有越来越多的空间商开放了对它们的支持，有的甚至是同时 支持这两个模块的。例如目前Godaddy、Bluehost及DreamHosts等空间商的服务器都已同时支持mod_gzip 和mod_deflate。        </p>
+<p>通过查看HTTP头，我们可以快速判断使用的客户端浏览器是否支持接受gzip压缩。若发送的HTTP头中出现以下信息，则表明你的浏览器支持接受相应的gzip压缩：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Accept-Encoding: gzip 支持mod_gzip</div><div class="line">Accept-Encoding: deflate 支持mod_deflate </div><div class="line">Accept-Encoding: gzip,deflate 同时支持mod_gzip 和mod_deflate</div></pre></td></tr></table></figure>
+<p>mod_deflate 是apache自带的模块,当然是在apache 2后支持的,以前1的时候是mod_gzip,启用mod_deflate可以很好的为节省网页大小,只不过是占用服务器的资源和内存.用户看到页面的速度会大大加快。在apache2.0以上（包括apache2.0）的版中gzip压缩使用的是mod_deflate模块</p>
+<ol>
+<li>查看apache的安装模式</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">apachectl -l</div></pre></td></tr></table></figure>
+<p>发现 mod_so.c，ok可以动态加模块，不用重新编译。</p>
+<ol>
+<li>安装mod_deflate</li>
+</ol>
+<p>找到原有的apache安装包安装mod_deflate</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">cd httpd-2.0.59/modules/filters</div><div class="line">/usr/local/apache2/bin/apxs -i -c -a mod_deflate.c</div></pre></td></tr></table></figure>
+<p>PS：apxs命令参数说明：</p>
+<p>-i  此选项表示需要执行安装操作，以安装一个或多个动态共享对象到服务器的modules目录中。</p>
+<p>-a  此选项自动增加一个LoadModule行到httpd.conf文件中，以激活此模块，或者，如果此行已经存在，则启用之。</p>
+<p>-A  与 -a 选项类似，但是它增加的LoadModule命令有一个井号前缀(#)，即此模块已经准备就绪但尚未启用。</p>
+<p>-c  此选项表示需要执行编译操作。它首先会编译C源程序(.c)files为对应的目标代码文件(.o)，然后连接这些目标代码和files中其余的目标代码文件(.o和.a)，以生成动态共享对象dsofile 。如果没有指定 -o 选项，则此输出文件名由files中的第一个文件名推测得到，也就是默认为mod_name.so 。</p>
+<p>3、修改Apache的http.conf文件，去除mod_deflate.so前面的注释</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">LoadModule deflate_module modules/mod_deflate.so</div></pre></td></tr></table></figure>
+<p>4、在根目录中新建.htaccess文件，定制压缩规则</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">#GZIP压缩模块配置&lt;ifmodule mod_deflate.c&gt;</div><div class="line">#启用对特定MIME类型内容的压缩</div><div class="line">SetOutputFilter DEFLATESetEnvIfNoCase Request_URI .(?:gif|jpe?g|png|exe|t?gz|zip|bz2|sit|rar|pdf|mov|avi|mp3|mp4|rm)$ no-gzip dont-vary #设置不对压缩的文件AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/x-httpd-php application/x-javascript #设置对压缩的文件&lt;/ifmodule&gt;</div></pre></td></tr></table></figure>
+<p>5、对指定的文件配置缓存的生存时间，去除mod_headers.so模块前面的注释</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">LoadModule headers_module modules/mod_headers.so</div></pre></td></tr></table></figure>
+<p>6、在根目录中新建.htaccess文件，定制压缩规则</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">#文件缓存时间配置</div><div class="line">&lt;FilesMatch &quot;.(flv|gif|jpg|jpeg|png|ico|swf|js|css)$&quot;&gt;</div><div class="line">Header set Cache-Control &quot;max-age=2592000&quot;</div><div class="line">&lt;/FilesMatch&gt;</div></pre></td></tr></table></figure>
+<p>里面的文件MIME类型可以根据自己情况添加，至于PDF 、图片、音乐文档之类的这些本身都已经高度压缩格式，重复压缩的作用不大，反而可能会因为增加CPU的处理时间及浏览器的渲染问题而降低性能。所以就没必要再通过Gzip压缩。通过以上设置后再查看返回的HTTP头，出现以下信息则表明返回的数据已经过压缩。即网站程序所配置的Gzip压缩已生效。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Content-Encoding: gzip</div></pre></td></tr></table></figure>
+<p>注：不管使用mod_gzip 还是mod_deflate，此处返回的信息都一样。因为它们都是实现的gzip压缩方式。</p>
+<p>遇到的问题以及解决:</p>
+<p>1：</p>
+<p>apach2 安装mod_deflate后restart,直接</p>
+<p>load /opt/apache/modules/mod_deflate.so into server: /opt/apache/modules/mod_deflate.so: undefined symbol: deflate 异常的痛苦</p>
+<p>什么ldd mod_deflate.so后再export LIB_LIBRARY_PATH呀，都试了N次，google也go了N天</p>
+<p>终于在google上go出来一篇文章，终于解决，方法如下： vi /usr/local/apache2/bin/apr-config 修改LDFLAGS=” “ 为 LDFLAGS=”-lz” 然后再apxs -ica mod_deflate.c 就OK了.</p>
+<p>2：<br>apach2 安装mod_deflate后restart,直接</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">module deflate_module is built-in and can&apos;t be loaded ...</div></pre></td></tr></table></figure>
+<p>这说明该模块已经安装，不必再LoadModule deflate_module启用它。</p>
+<p>只需做<ifmodule mod_deflate.c="">配置</ifmodule></p>
+<p><a href="http://my.oschina.net/rasine/blog/343769" target="_blank" rel="external">阅读原文</a></p>
+
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">quanke.name</a>
+            
+        </div>
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/posts/15671/" class="pre-post btn btn-default"><i class="fa fa-angle-left fa-fw"></i>上一篇</a>
+    
+    
+        <a href="/posts/45299/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+	
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMzY4OS8xMDI0NA==">
+  <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+         if (typeof LivereTower === 'function') { return; }
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+  </script>
+</div>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">    
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢?">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget notification">
+        <h3 class="title">网站公告</h3>
+        <div>
+            <p>《Spring Boot 与 kotlin 实战》 系列教程上线<br/>
+专题：<a href="http://quanke.name/spring-boot-with-kotlin-in-action" title="fork me" target="_blank">《Spring Boot 与 kotlin 实战》</a> <br/>
+<hr>
+<img  width="100%" align="center" src="https://static.oschina.net/uploads/img/201711/08183543_ysUa.jpg">
+<hr>
+QQ交流群：370156529
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/quanke" rel="external nofollow" title="Github" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:caiquanke_88@163.com" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="//weibo.com/quankecai" rel="external nofollow" title="微博" target="_blank">
+			    	<i class="weibo fa fa-weibo"></i>
+			    </a>
+            
+	            <a href="//jq.qq.com/?_wv=1027&k=5MOKtIE" rel="external nofollow" title="QQ群" target="_blank">
+			    	<i class="users fa fa-users"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/es/"><i class="fa" aria-hidden="true">Elasticsearch</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/golang/"><i class="fa" aria-hidden="true">Go语言</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MBaaS-LiveOak系列/"><i class="fa" aria-hidden="true">MBaaS-LiveOak系列</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/rn/"><i class="fa" aria-hidden="true">React Native</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-Boot与kotlin实战/"><i class="fa" aria-hidden="true">Spring Boot与kotlin实战</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vertx/"><i class="fa" aria-hidden="true">Vert.x3 系列</i></a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/"><i class="fa" aria-hidden="true">android开发</i></a><span class="category-list-count">54</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/"><i class="fa" aria-hidden="true">git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ios/"><i class="fa" aria-hidden="true">ios开发</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/"><i class="fa" aria-hidden="true">node.js</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/use/"><i class="fa" aria-hidden="true">使用</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/bdata/"><i class="fa" aria-hidden="true">大数据</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/service/"><i class="fa" aria-hidden="true">服务端开发</i></a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/autotest/"><i class="fa" aria-hidden="true">自动化测试</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gof/"><i class="fa" aria-hidden="true">设计模式</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/se/"><i class="fa" aria-hidden="true">软件工程</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/essay/"><i class="fa" aria-hidden="true">随笔</i></a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/project/"><i class="fa" aria-hidden="true">项目实战</i></a><span class="category-list-count">1</span></li></ul>
+    </div>
+
+
+        
+        
+    <div class="widget">
+      <h3 class="title">归档</h3>
+        <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/"><i class="fa" aria-hidden="true">二月 2018</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">十二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/"><i class="fa" aria-hidden="true">十一月 2017</i></a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/"><i class="fa" aria-hidden="true">二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/"><i class="fa" aria-hidden="true">十月 2016</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/"><i class="fa" aria-hidden="true">七月 2016</i></a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/"><i class="fa" aria-hidden="true">五月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/"><i class="fa" aria-hidden="true">四月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/"><i class="fa" aria-hidden="true">一月 2016</i></a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/"><i class="fa" aria-hidden="true">八月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/"><i class="fa" aria-hidden="true">七月 2015</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/"><i class="fa" aria-hidden="true">五月 2015</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/"><i class="fa" aria-hidden="true">四月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/"><i class="fa" aria-hidden="true">十一月 2014</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/"><i class="fa" aria-hidden="true">六月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/"><i class="fa" aria-hidden="true">二月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/"><i class="fa" aria-hidden="true">一月 2013</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/"><i class="fa" aria-hidden="true">十二月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/"><i class="fa" aria-hidden="true">十一月 2012</i></a><span class="archive-list-count">40</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/"><i class="fa" aria-hidden="true">十月 2012</i></a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/"><i class="fa" aria-hidden="true">九月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/"><i class="fa" aria-hidden="true">八月 2012</i></a><span class="archive-list-count">4</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        <a href="/tags/API/" style="font-size: 13.33px;">API</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/android-pg/" style="font-size: 10px;">Android多渠道打包</a> <a href="/tags/es/" style="font-size: 16.67px;">Elasticsearch</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IOS/" style="font-size: 10px;">IOS</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/th-java/" style="font-size: 10px;">Java 编程思想</a> <a href="/tags/JavaEE/" style="font-size: 10px;">JavaEE</a> <a href="/tags/LiveOak/" style="font-size: 13.33px;">LiveOak</a> <a href="/tags/MBaaS/" style="font-size: 15px;">MBaaS</a> <a href="/tags/PM2/" style="font-size: 10px;">PM2</a> <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/rn/" style="font-size: 10px;">React Native</a> <a href="/tags/SDK/" style="font-size: 10px;">SDK</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/vertx-for-java/" style="font-size: 10px;">Vert.x Core手册 for Java</a> <a href="/tags/Vert-x3/" style="font-size: 20px;">Vert.x3</a> <a href="/tags/Vertx/" style="font-size: 20px;">Vertx</a> <a href="/tags/windows-install/" style="font-size: 10px;">Windows10安装</a> <a href="/tags/android/" style="font-size: 18.33px;">android</a> <a href="/tags/android-a/" style="font-size: 10px;">android动画</a> <a href="/tags/elasticsearch/" style="font-size: 11.67px;">elasticsearch</a> <a href="/tags/gitbook/" style="font-size: 10px;">gitbook</a> <a href="/tags/ios/" style="font-size: 10px;">ios</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/tags/logstash/" style="font-size: 11.67px;">logstash</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node-js-运行/" style="font-size: 10px;">node.js 运行</a> <a href="/tags/spirng-boot/" style="font-size: 10px;">spirng boot</a> <a href="/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/tags/swagger-ui/" style="font-size: 10px;">swagger ui</a> <a href="/tags/swagger-api/" style="font-size: 10px;">swagger-api</a> <a href="/tags/swagger-edit/" style="font-size: 10px;">swagger-edit</a> <a href="/tags/bdaga/" style="font-size: 16.67px;">大数据</a> <a href="/tags/opensouce/" style="font-size: 10px;">开源</a> <a href="/tags/conclusion/" style="font-size: 10px;">总结</a> <a href="/tags/api/" style="font-size: 10px;">接口文档</a> <a href="/tags/careful/" style="font-size: 10px;">注意</a> <a href="/tags/career-planning/" style="font-size: 10px;">职业规划</a> <a href="/tags/autotest/" style="font-size: 10px;">自动化测试</a> <a href="/tags/gof/" style="font-size: 10px;">设计模式</a> <a href="/tags/data/" style="font-size: 11.67px;">资料</a> <a href="/tags/test/" style="font-size: 10px;">软件测试</a>
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://quanke.name" class="fa" target="_blank">我全科博客</a>
+        
+            <a href="http://satra.gitee.io/blog/" class="fa" target="_blank">我在万达摆地摊</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12"> 
+                <span>Copyright &copy; 2017
+                </span> | 
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> | 
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+	<script src="/js/search.js?rev=@@hash"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+
+</body>
+</html>

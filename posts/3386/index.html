@@ -1,0 +1,467 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="全科-不安分的码农">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://quanke.name">
+    <!--SEO-->
+
+
+
+
+
+<meta name="robots" content="all" />
+<meta name="google" content="all" />
+<meta name="googlebot" content="all" />
+<meta name="verify" content="all" />
+    <!--Title-->
+
+
+<title>深度剖析CloudFoundry的架构设计 | 全科-不安分的码农</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="全科-不安分的码农" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
+<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?853906ed403c461b2dbf1df696bdf998";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+	<script>
+		(function(i, s, o, g, r, a, m) {
+		    i['GoogleAnalyticsObject'] = r;
+		    i[r] = i[r] || function() {
+		        (i[r].q = i[r].q || []).push(arguments)
+		    }, i[r].l = 1 * new Date();
+		    a = s.createElement(o),
+		    m = s.getElementsByTagName(o)[0];
+		    a.async = 1;
+		    a.src = g;
+		    m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-82833335-5', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+
+    
+</head>
+
+
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header"  style="background-image:url(http://7xpw2b.com1.z0.glb.clouddn.com/hexo-sinppet/img/banner2.jpg)"  >
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="">
+            <img src="/img/avatar.jpg" alt="logo头像">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                 <img src="/img/branding.png" alt="Snippet 博客主题">  
+             
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                    </span>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>主页</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/free-books"><i class="fa fa-fw "></i>开源书籍</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>应用</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>开源</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="深度剖析CloudFoundry的架构设计">
+            
+	            深度剖析CloudFoundry的架构设计
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>服务端开发</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            null
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2012/11/15</span>
+    </span>
+</div>
+
+            
+            
+            <p class="fa fa-exclamation-triangle warning">
+                本文于<strong>1905</strong>天之前发表，文中内容可能已经过时。
+            </p>
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>VMware在今年4月份突然发布了业内第一个开源的PaaS——CloudFoundry。发布至今的这几个月里，笔者一直关注它的演进，并从它的架构设计中获益良多，觉得有必要写出来与大家分享一下。</p>
+<p>本文会分为两个部份：第一部份主要介绍CloudFoundry的架构设计，从它所包含的模块介绍起，到各部份的消息流向，各模块如何协调合作；第二部份会在第一部份的基础上，以如何在你的数据中心里面用CloudFoundry部署一个私有PaaS为目标，把第一部分介绍到的架构知识使用起来。</p>
+<p>第一部份讲的很多内容，会引用Pat在10月12日的VMwareCloud Forum上面关于CloudFoundry架构的演讲。Pat是CloudFoundry Core的负责人，他的那次演讲很值得一听。如果你当时在场，并且理解他所说的内容，本部份可以选择直接跳过。我除了会把说的内容讲具体点外，不太可能可以讲得比他好。</p>
+<p><strong>一、架构及模块</strong></p>
+<p>从总体地看，CloudFoundry的架构如下：</p>
+<p><img src="http://img.watchstor.com/uploadimg/20111027/1348180.jpg" alt="深度剖析CloudFoundry的架构设计"></p>
+<p>这个架构图以及下文所用到的各模块架构图均来自Pat的PPT。从上图能够看到CloudFoundry主要有以下几大组件组成：</p>
+<p>1、 Router：顾名思义，Router组件在CloudFoundry中是对所有进来的Request进行路由。进入Router的request主要有两类：首先是来自VMCClient或者STS的，由CloudFoundry使用者发出的，管理型指令。</p>
+<p>例如：列出你所有apps的vmcapps，提交一个apps等等。这类request会被路由到AppLife Management组件，又叫CloudController组件去；第二类是外界对你所部署的apps访问的request。这部份requests会被路由到Appexecution，又或者叫做DEAs的组件去。所有进入CloudFoundry系统的requests都会经过Router组件，看到这里可能会有朋友会担心Router成为单点，从而成为整个云的瓶颈。</p>
+<p>但是CloudFoundry作为云系统，其设计的核心就是去单点依赖，组件平行扩充，且可替代的以保证扩展性，这是CloudFoundry，甚至所有云计算系统的设计原则，后文会讨论CloudFoundry如何做到这点，目前只要知道，系统可以部署多个Routers共同处理进来的requests，但是Router上层的LoadBalance不在CloudFoundry的实现范围，CloudFoundry只保证所有的request是无状态的，这样就使上层均衡附载选择面非常非常大了，例如可以通过DNS做，也可以部署硬件的LoadBalancer，或者简单点，弄台ngnix作负载均衡器，都是可行的。</p>
+<p>Router组件，目前版本是对nginx的一个简单封装。熟悉ngnix的朋友应该知道，它可以一个套接字文件（.sock文件）作为输入输出。所有安装CloudFoundry的Router组件服务器都会安装一个nginx，其ngnix.conf文件有以下配置：</p>
+<p><img src="http://img.watchstor.com/uploadimg/20111027/1348181.jpg" alt="深度剖析CloudFoundry的架构设计"></p>
+<p>从整体的来看，Router组件的结构如下：</p>
+<p><img src="http://img.watchstor.com/uploadimg/20111027/1348182.jpg" alt="深度剖析CloudFoundry的架构设计"></p>
+<p>外界httprequest进入CloudFoundry服务器，nginx会首先接到request，nginx通过sock与router.rb进行交互，于是真正处理请求的是Router组件。router.rb里面根据传入的url，用户名密码等，进行逻辑判断，到CloudController组件或者DEA组件取数据并且返通过与niginx连接的.sock文件返回。</p>
+<p>router.rb是对nginx进行了逻辑封装。熟悉CloudFoundry的朋友肯定知道，CloudFoundry给每一个app分配了一个url访问，如果直接使用VMware所托管的CloudFoundry.com的话，那你的app的url可能就是xxx.cloudfoundry.com，无论通过命令给你的app扩展了多少个instances，都是从这个url访问的，这里面的url转换路由就是由router.rb实现的。</p>
+<p>2、DEA(Droplet Execution Agency): 首先要解析下什么叫做Droplet。Droplet在CloudFoundry的概念里面是指一个把你提交的源代码，以及CloudFoundry配套好的运行环境，再加上一些管理脚本，例如Start/Stop这些小脚本全部压缩好在一起的tar包。还有一个概念，叫做Stagingapp，就是指制作上面描述这个包，然后把它存储好的过程。CloudFoundry会自动保存这个Droplet，直到你start一个app的时候，一台部署了DEA模块的服务器会来拿一个Droplet的copy去运行。所以如果你扩展你的app到10个instances，那这个Droplet就被会复制十份，让10个DEA服务器拿去运行。</p>
+<p>下图是DEA模块的架构图：</p>
+<p><img src="http://img.watchstor.com/uploadimg/20111027/1348183.jpg" alt="深度剖析CloudFoundry的架构设计"></p>
+<p>Cloud Controller模块（下面会介绍）会发送start/stop等基本的apps管理请求给DEA，dea.rb接收这些请求，然后从NFS里面找到合适的Droplet。前面说到Droplet其实是一个带有运行脚本的，带运行环境的tar包，DEA只需要把它拿过来解压，并即行里面的start脚本，就可以让这个app跑起来。到此，app算是可以访问，并start起来了，换句话说就是有这台服务器的某一个端口已经在待命，只要有request从这个端口进来，这个app就可以接收并返回正确的信息。</p>
+<p>接着dea.rb要做些善后的工作：1、把这个信息告诉Router模块。我们前面说到，所有进入CloudFoundry的requests都是由Router模块处理并转发的，包括用户对app的访问request，一个app起来后，需要告诉router，让它根据loadbalance等原则，把合适的request转进来，使这个app的instance能够干起活；2、一些统计性的工作，例如要把这个用户又新部署了一个app告诉CloudController，以作quota控制等；3、把运行信息告诉HealthManager模块，实时报告该app的instance运行情况。另外DEA还要负责部份对Droplet的查询工作，譬如，如果用户通过CloudController想查询一个app的log信息，那DEA需要从该Droplet里面取到log返回等等。</p>
+<p>3、CloudController：CloudController是CloudFoundry的管理模块。主要工作包括：</p>
+<p>a) 对apps的增删改读；</p>
+<p>b) 启动、停止应用程序；</p>
+<p>c) Staging apps（把apps打包成一个droplet）；</p>
+<p>d) 修改应用程序运行环境，包括instance、mem等等；</p>
+<p>e) 管理service，包括service与app的绑定等；</p>
+<p>f) Cloud环境的管理；</p>
+<p>g) 修改Cloud的用户信息；</p>
+<p>h) 查看Cloud Foundry，以及每一个app的log信息。</p>
+<p>这似乎有点复杂，但简单的说，可以很简单：就是与VMC和STS交互的服务器端。VMC和STS与CloudFoundry通信采用的是restful接口，另一方面CloudController是一个典型的Rubyon Rails项目，从VMC或者STS接到JSON格式的协议，然后写入CloudController Database，并发消息到各模快去控制管理整个云。和其他ROR项目一样，CloudController的所有API可以从conf/routes.rb里看到。开放的Restful接口好处在于第三方应用开发和集成，企业在用CloudFoundry部署私有云的时候，可以通过这些接口来自动化控制管理整个Cloud环境。这部份内容将在第二部份论述。</p>
+<p>下图是Cloud Controller的架构图：</p>
+<p><img src="http://img.watchstor.com/uploadimg/20111027/1348184.jpg" alt="深度剖析CloudFoundry的架构设计"></p>
+<p>图中Health Manager和DEA是外部模块，CCDatabase就是CloudController Database，这个是整个CloudFoundry不能做HP的地方。CloudController Database的并发性不会很多，应用级别的数据库访问是由底下的Service模块处理的，这个数据库存的是Cloud的配置信息。读操作主要来自DEA启动，作为初始化DEA的依据；以及healthmanager模块会从这里读取预期的状态信息，这部份数据会与从DEA得到的实际状态信息进行比对。</p>
+<p>NFS是多个CloudController的共享存储，CloudController其中一个重要工作就是StagingApps。Droplets的存储是在集群环境的唯一的。而CloudController是集群运行，换言之，就是每一个控制Request可能由不同的CloudController处理，假设一个简单的用户场景：我们需要部署一个app到CloudFoundry中。我们在敲完那条简单的push命令后，VMC开始工作，在做完一轮的用户鉴权、查看所部署的apps数量是否超过预定数额，问了一堆相关app的问题后，需要发4个指令：</p>
+<p>1．发一个POST到”apps”，创建一个app;</p>
+<p>2．发一个PUT到”apps/:name/application”，上传app;</p>
+<p>3．发一个GET到”apps/:name/”，取得app状态，看看是否已经启动；</p>
+<p>4．如果没有启动，发一个PUT到”apps/:name/”，使其启动。</p>
+<p>如果第2和第4步由不同的Cloud Controller来处理，而又无法保证他们能找到同一个Droplet，那第4步将会因为找不到对应的Droplet而启动失败。如何保证这一连串指令过来所指向的Droplet都是同一个呢？使用NFS，使CloudController共享存储是最简单的方法。但是这个方法在安全性等方面并不完美。在10月12日的VMwareCloud Forum上，Pat告诉我们下一版本的CloudFoundry这里将会有大调整，但是在那部份代码公开前，我不方便在这评价太多。</p>
+<p>4、HealthManager: 做的事情不复杂，简单的说是从各个DEA里面拿到运行信息，然后进行统计分析，报告等。统计数据会与CloudController的设定指标进行比对，并提供Alert等。HealthManager模块目前还不是十分完善，但是CloudManage栈里面，自动化health管理、分析是一个很重要的领域，而这方面可以扩展的地方也很多，结合OrchestrationEngine可以使云自管理、自预警；而与BI方面技术结合，可以统计运营情况，合理分配资源等。这方面CloudFoundry还在发展之中。</p>
+<p>5、Services:Cloud Foundry的Service模块从源代码控制上看就知道是一个独立的、可Plugin的模块，以方便第三方把自己的服务整合入CloudFoundry生态系统。在Github上看到service是与CloudFoundry Core项目vcap独立的一个repository，为vcap-service。Service模块其中设计原则是方便第三方服务提供商提供服务。在这方面CloudFoundry做得很成功，从Github上看，已经有以下服务提供：a)MongoDB; b) mysql; c) neo4j; d) PostgreSql; e) RabbitMQ; f) Redis; g)vBlob。基类都是放在base文件夹中。</p>
+<p>第三方如果需要自己开发CloudFoundry的服务，需要继承改写它里面的两个基础类：Node和Gateway；而里面一些操作，如：Provision，可以在base的provisioner.rb基础上加入自己的逻辑，同样的还有Service_Error和Service_Message等。关于如何写自己的Service，ELC的博客会推出相应文章详细论述，并不在本文的讨论范围里面，从架构了解上来说，只要知道服务间的关系，知道个服务与base间透过继承关系来横向扩充，而CloudFoundry与apps调用Service是通过base来完成这一简单的架构方法即可。</p>
+<p>6、NATS(Message bus): 从CloudFoundry的总架构图看，位于各模块中心位置的是一个叫nats的组件。NATS是由CloudFoundry的架构师Derek开发的一个轻量级的，支持发布、订阅机制的消息系统。Github开源地址是：<a><a href="https://github.com/derekcollison/nats" target="_blank" rel="external">https://github.com/derekcollison/nats</a></a>。其核心基于EventMachine开发，代码量不多，可以下载下来慢慢研究。</p>
+<p>CloudFoundry是一个多模块的分布式系统，支持模块自发现，错误自检，且模块间低耦合。其核心原理就是基于消息发布订阅机制。每个台服务器上的每个模块会根据自己的消息类别，向MessageBus发布多个消息主题；而同时也向自己需要交互的模块，按照需要的信息内容的消息主题订阅消息。譬如：一个DEA被加入CloudFoundry集群中，它需要向大家吼一下，以表明它已经准备好服务了，它会发布一个主题是”dea.start”的消息：</p>
+<p><img src="http://img.watchstor.com/uploadimg/20111027/1348185.jpg" alt="深度剖析CloudFoundry的架构设计"></p>
+<p>@ hello_message_json中包括DEA的UUID,ip, port, 版本信息等内容。</p>
+<p>再例如，CloudController需要启动一个Droplet的instance：</p>
+<p>a)首先一个DEA在启动的时候，会首先会对自己UUID的消息主题进行订阅。</p>
+<p><img src="http://img.watchstor.com/uploadimg/20111027/1348186.jpg" alt="深度剖析CloudFoundry的架构设计"></p>
+<p>其他模块需要通过’’dea.#{uuid}.start”这个主题发送消息来使它启动，一旦这个DEA接收到消息，就会触发process_dea_start(msg)这个方法来处理启动所需要的工作。</p>
+<p>b)Cloud Controller或者其他模块发送消息，让UUID为xxx的DEA启动。</p>
+<p><img src="http://img.watchstor.com/uploadimg/20111027/1348187.jpg" alt="深度剖析CloudFoundry的架构设计"></p>
+<p>c)DEA模块接收到消息后，就会触发process_dea_start(msg)方法。msg是由其他模块发送过来的消息内容，包括：droplet_id,instance_index, service, runtime等内容，process_dea_start会取得这些启动DEA必须的信息，然后进行一系列操作，例如从NFS中取得Droplet，解压，修改必要环境配置，运行启动脚本等等。等一切都准备好后，然后需要给Router发个消息，告诉它这个Droplet已经随时准备好报效国家，以后有相应的request记得让它来处理。</p>
+<p><img src="http://img.watchstor.com/uploadimg/20111027/1348188.jpg" alt="深度剖析CloudFoundry的架构设计"></p>
+<p>d)Router模块在启动时就已经订阅”router.register”消息主题。</p>
+<p><img src="http://img.watchstor.com/uploadimg/20111027/1348189.jpg" alt="深度剖析CloudFoundry的架构设计"></p>
+<p>收到前面DEA发出的信息后，会触发register_droplet方法，去绑定Droplet。到此启动一个Droplet的instance工作完成。</p>
+<p>我们可以看到整个CloudFoundry的核心就是一套消息系统，如果想了解CloudFoundry的来龙去脉，去跟踪它里面复杂的消息机制是非常好的方法。另一方面，CloudFoundry是一套基于消息的分布式系统，面向消息的架构是它节点横向扩展，组件自发现等云特性的基础。</p>
+<p>Cloud Foundry的架构简单介绍至此，其实作为第一款开源的PaaS，CloudFoundry架构有很多可以学习借鉴的地方，很多细节上的处理是很精妙的，这些内容如果有可能会在后续文章继续探讨，本文题虽为深入CloudFoundry，其实也只是浅尝即止，把总体架构介绍一下，目标在于使我们有足够的背景知识去用CloudFoundry搭建企业内部的私有PaaS。总结一下，笔者从CloudFoundry的结构中学到的东西：</p>
+<p>1、基于消息的多组件架构是实现集群的简单、且有效方法。消息可以使集群节点间解耦，使自注册，自发现这些在大规模数据中心中很重要的功能得到实现；</p>
+<p>2、适当的抽象层，模板模式的使用，方便第三方可以方便在CloudFoundry开发扩展功能。CloudFoundry在DEA及Service层都做了抽象层处理，相对应地使开发者可以容易地为CloudFoundry开发Runtime和Service。例如，在CloudFoundry刚推出的时候，只支持Node.js,Java, Ruby，但第三方提供商、开源社区快速跟进，为CloudFoundry添加了PHP,Python的支持。这得益于CloudFoundry精巧的DEA架构设计，如何开发新的Runtime支持，会在后续博文中有所论述.</p>
+<p><strong>二、源码导读</strong></p>
+<p>笔者一直觉得深入理解一个技术的最好方法就是读它的源码，而CloudFoundry是完全开源的PaaS平台，而因为刚发展起来，代码量不多，主要作者们的代码功力也相当不错，读起来很舒服，很适合研读。而不得不再次表扬一下它完全基于消息机制的架构设计，对组件扩展性，第三方接入等方面做得很好，读者可以从中学到不少思想性的东西。笔者很推荐大家去读一下它的源代码。你可以在Github上找到CloudFoundry的全部代码：<a><a href="https://github.com/cloudfoundry" target="_blank" rel="external">https://github.com/cloudfoundry</a></a>，你会看到几个不同的Repositories，它们分别是：</p>
+<p>1、vcap: Cloud Foundry的Core，又或者称作Kernel；</p>
+<p>2、vcap-service: Cloud Foundry的Service组件。Cloud Foundry的service是作为插件提供的，这出于它方便第三方开发service而设计的；</p>
+<p>3、vmc: VMware Cloud CLI. 是一个Ruby应用，与Cloud Foundry的CLI交互。主要通过分析用户输入的CLI，向CloudFoundry发送Restful请求；</p>
+<p>4、vcap-java: 如果你的app是用java开发，且需要与Cloud Foundry交互，例如取得当前serviceserver的ip地址等，你可能需要这个jar，里面对我们Java开发常用框架有所支持，它底层也是对CloudFoundry的Restful请求的包装；</p>
+<p>5、vcap-java-client: Cloud Foundry的Restful API的Java封装，与上面的项目不一样，它只是个简单的读取CloudFoundry信息，并放如JavaBean中；</p>
+<p>6、vcap-test: Cloud Foundry的test cases;</p>
+<p>7、vcap-test-assets: Cloud Foundry一些apps示例。</p>
+<p>原文链接：<a href="http://qing.weibo.com/2294942122/88ca09aa330004r8.html" target="_blank" rel="external">http://qing.weibo.com/2294942122/88ca09aa330004r8.html</a></p>
+
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">quanke.name</a>
+            
+        </div>
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/posts/33755/" class="pre-post btn btn-default"><i class="fa fa-angle-left fa-fw"></i>上一篇</a>
+    
+    
+        <a href="/posts/43816/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+	
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMzY4OS8xMDI0NA==">
+  <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+         if (typeof LivereTower === 'function') { return; }
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+  </script>
+</div>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">    
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢?">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget notification">
+        <h3 class="title">网站公告</h3>
+        <div>
+            <p>《Spring Boot 与 kotlin 实战》 系列教程上线<br/>
+专题：<a href="http://quanke.name/spring-boot-with-kotlin-in-action" title="fork me" target="_blank">《Spring Boot 与 kotlin 实战》</a> <br/>
+<hr>
+<img  width="100%" align="center" src="https://static.oschina.net/uploads/img/201711/08183543_ysUa.jpg">
+<hr>
+QQ交流群：370156529
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/quanke" rel="external nofollow" title="Github" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:caiquanke_88@163.com" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="//weibo.com/quankecai" rel="external nofollow" title="微博" target="_blank">
+			    	<i class="weibo fa fa-weibo"></i>
+			    </a>
+            
+	            <a href="//jq.qq.com/?_wv=1027&k=5MOKtIE" rel="external nofollow" title="QQ群" target="_blank">
+			    	<i class="users fa fa-users"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/es/"><i class="fa" aria-hidden="true">Elasticsearch</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/golang/"><i class="fa" aria-hidden="true">Go语言</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MBaaS-LiveOak系列/"><i class="fa" aria-hidden="true">MBaaS-LiveOak系列</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/rn/"><i class="fa" aria-hidden="true">React Native</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-Boot与kotlin实战/"><i class="fa" aria-hidden="true">Spring Boot与kotlin实战</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vertx/"><i class="fa" aria-hidden="true">Vert.x3 系列</i></a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/"><i class="fa" aria-hidden="true">android开发</i></a><span class="category-list-count">54</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/"><i class="fa" aria-hidden="true">git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ios/"><i class="fa" aria-hidden="true">ios开发</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/"><i class="fa" aria-hidden="true">node.js</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/use/"><i class="fa" aria-hidden="true">使用</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/bdata/"><i class="fa" aria-hidden="true">大数据</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/service/"><i class="fa" aria-hidden="true">服务端开发</i></a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/autotest/"><i class="fa" aria-hidden="true">自动化测试</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gof/"><i class="fa" aria-hidden="true">设计模式</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/se/"><i class="fa" aria-hidden="true">软件工程</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/essay/"><i class="fa" aria-hidden="true">随笔</i></a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/project/"><i class="fa" aria-hidden="true">项目实战</i></a><span class="category-list-count">1</span></li></ul>
+    </div>
+
+
+        
+        
+    <div class="widget">
+      <h3 class="title">归档</h3>
+        <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/"><i class="fa" aria-hidden="true">二月 2018</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">十二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/"><i class="fa" aria-hidden="true">十一月 2017</i></a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/"><i class="fa" aria-hidden="true">二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/"><i class="fa" aria-hidden="true">十月 2016</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/"><i class="fa" aria-hidden="true">七月 2016</i></a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/"><i class="fa" aria-hidden="true">五月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/"><i class="fa" aria-hidden="true">四月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/"><i class="fa" aria-hidden="true">一月 2016</i></a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/"><i class="fa" aria-hidden="true">八月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/"><i class="fa" aria-hidden="true">七月 2015</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/"><i class="fa" aria-hidden="true">五月 2015</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/"><i class="fa" aria-hidden="true">四月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/"><i class="fa" aria-hidden="true">十一月 2014</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/"><i class="fa" aria-hidden="true">六月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/"><i class="fa" aria-hidden="true">二月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/"><i class="fa" aria-hidden="true">一月 2013</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/"><i class="fa" aria-hidden="true">十二月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/"><i class="fa" aria-hidden="true">十一月 2012</i></a><span class="archive-list-count">40</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/"><i class="fa" aria-hidden="true">十月 2012</i></a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/"><i class="fa" aria-hidden="true">九月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/"><i class="fa" aria-hidden="true">八月 2012</i></a><span class="archive-list-count">4</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        <a href="/tags/API/" style="font-size: 13.33px;">API</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/android-pg/" style="font-size: 10px;">Android多渠道打包</a> <a href="/tags/es/" style="font-size: 16.67px;">Elasticsearch</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IOS/" style="font-size: 10px;">IOS</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/th-java/" style="font-size: 10px;">Java 编程思想</a> <a href="/tags/JavaEE/" style="font-size: 10px;">JavaEE</a> <a href="/tags/LiveOak/" style="font-size: 13.33px;">LiveOak</a> <a href="/tags/MBaaS/" style="font-size: 15px;">MBaaS</a> <a href="/tags/PM2/" style="font-size: 10px;">PM2</a> <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/rn/" style="font-size: 10px;">React Native</a> <a href="/tags/SDK/" style="font-size: 10px;">SDK</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/vertx-for-java/" style="font-size: 10px;">Vert.x Core手册 for Java</a> <a href="/tags/Vert-x3/" style="font-size: 20px;">Vert.x3</a> <a href="/tags/Vertx/" style="font-size: 20px;">Vertx</a> <a href="/tags/windows-install/" style="font-size: 10px;">Windows10安装</a> <a href="/tags/android/" style="font-size: 18.33px;">android</a> <a href="/tags/android-a/" style="font-size: 10px;">android动画</a> <a href="/tags/elasticsearch/" style="font-size: 11.67px;">elasticsearch</a> <a href="/tags/gitbook/" style="font-size: 10px;">gitbook</a> <a href="/tags/ios/" style="font-size: 10px;">ios</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/tags/logstash/" style="font-size: 11.67px;">logstash</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node-js-运行/" style="font-size: 10px;">node.js 运行</a> <a href="/tags/spirng-boot/" style="font-size: 10px;">spirng boot</a> <a href="/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/tags/swagger-ui/" style="font-size: 10px;">swagger ui</a> <a href="/tags/swagger-api/" style="font-size: 10px;">swagger-api</a> <a href="/tags/swagger-edit/" style="font-size: 10px;">swagger-edit</a> <a href="/tags/bdaga/" style="font-size: 16.67px;">大数据</a> <a href="/tags/opensouce/" style="font-size: 10px;">开源</a> <a href="/tags/conclusion/" style="font-size: 10px;">总结</a> <a href="/tags/api/" style="font-size: 10px;">接口文档</a> <a href="/tags/careful/" style="font-size: 10px;">注意</a> <a href="/tags/career-planning/" style="font-size: 10px;">职业规划</a> <a href="/tags/autotest/" style="font-size: 10px;">自动化测试</a> <a href="/tags/gof/" style="font-size: 10px;">设计模式</a> <a href="/tags/data/" style="font-size: 11.67px;">资料</a> <a href="/tags/test/" style="font-size: 10px;">软件测试</a>
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://quanke.name" class="fa" target="_blank">我全科博客</a>
+        
+            <a href="http://satra.gitee.io/blog/" class="fa" target="_blank">我在万达摆地摊</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12"> 
+                <span>Copyright &copy; 2017
+                </span> | 
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> | 
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+	<script src="/js/search.js?rev=@@hash"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+
+</body>
+</html>

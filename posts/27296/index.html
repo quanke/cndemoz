@@ -1,0 +1,456 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="全科-不安分的码农">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://quanke.name">
+    <!--SEO-->
+
+
+
+
+
+<meta name="robots" content="all" />
+<meta name="google" content="all" />
+<meta name="googlebot" content="all" />
+<meta name="verify" content="all" />
+    <!--Title-->
+
+
+<title>我的第一个Vert.x 3 应用 | 全科-不安分的码农</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="全科-不安分的码农" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
+<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?853906ed403c461b2dbf1df696bdf998";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+	<script>
+		(function(i, s, o, g, r, a, m) {
+		    i['GoogleAnalyticsObject'] = r;
+		    i[r] = i[r] || function() {
+		        (i[r].q = i[r].q || []).push(arguments)
+		    }, i[r].l = 1 * new Date();
+		    a = s.createElement(o),
+		    m = s.getElementsByTagName(o)[0];
+		    a.async = 1;
+		    a.src = g;
+		    m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-82833335-5', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+
+    
+</head>
+
+
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header"  style="background-image:url(http://7xpw2b.com1.z0.glb.clouddn.com/hexo-sinppet/img/banner2.jpg)"  >
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="">
+            <img src="/img/avatar.jpg" alt="logo头像">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                 <img src="/img/branding.png" alt="Snippet 博客主题">  
+             
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                    </span>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>主页</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/free-books"><i class="fa fa-fw "></i>开源书籍</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>应用</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>开源</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="我的第一个Vert.x 3 应用">
+            
+	            我的第一个Vert.x 3 应用
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>Vert.x3 系列</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            Vert.x3
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2016/01/12</span>
+    </span>
+</div>
+
+            
+            
+            <p class="fa fa-exclamation-triangle warning">
+                本文于<strong>752</strong>天之前发表，文中内容可能已经过时。
+            </p>
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <ul>
+<li>欢迎关注<a href="http://quanke.name/">http://quanke.name/</a></li>
+<li>交流群：<code>231419585</code></li>
+<li>转载请注明出处，谢谢</li>
+</ul>
+<p>如果，你听到有人说Vert.x 是牛逼的。非常好！但是你自己想要尝试的话，Ok great，那么下一个问题自然是“从哪里开始？”，这篇文章是一个很好的起点。文章展示了怎么构建一个非常简单的 vert.x 应用（这没什么大不了的），怎样测试和执行vert.x应用。</p>
+<p>文章里提到的代码在<a href="https://github.com/quanke/vertx3_study_demo/tree/master/my-vertx-first-app" target="_blank" rel="external">github</a> 。</p>
+<h3 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h3><p>首先，创建一个项目，在这篇文章中使用<code>Apache Maven</code>,当然你可以使用<code>Gradle</code> 或者其他工具，使用<code>Maven jar archetype</code> 创建结构，但基本上只需要一个目录。</p>
+<ul>
+<li><code>src/main/java</code> 目录</li>
+<li><code>src/test/java</code> 目录</li>
+<li><code>pom.xml</code> 文件</li>
+</ul>
+<p>会得到一个像这样的结构</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">.</div><div class="line">├── pom.xml</div><div class="line">├── src</div><div class="line">│   ├── main</div><div class="line">│   │   └── java</div><div class="line">│   └── test</div><div class="line">│       └── java</div></pre></td></tr></table></figure>
+<p><code>pom.xml</code> 文件的内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;</div><div class="line">         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</div><div class="line">         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0</div><div class="line">                      http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</div><div class="line">  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</div><div class="line">  &lt;groupId&gt;name.quanke.study.vertx.first&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;my-first-app&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;</div><div class="line"></div><div class="line">  &lt;dependencies&gt;</div><div class="line">    &lt;dependency&gt;</div><div class="line">      &lt;groupId&gt;io.vertx&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;vertx-core&lt;/artifactId&gt;</div><div class="line">      &lt;version&gt;3.0.0&lt;/version&gt;</div><div class="line">    &lt;/dependency&gt;</div><div class="line">  &lt;/dependencies&gt;</div><div class="line"></div><div class="line">  &lt;build&gt;</div><div class="line">    &lt;plugins&gt;</div><div class="line">      &lt;plugin&gt;</div><div class="line">        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</div><div class="line">        &lt;version&gt;3.3&lt;/version&gt;</div><div class="line">        &lt;configuration&gt;</div><div class="line">          &lt;source&gt;1.8&lt;/source&gt;</div><div class="line">          &lt;target&gt;1.8&lt;/target&gt;</div><div class="line">        &lt;/configuration&gt;</div><div class="line">      &lt;/plugin&gt;</div><div class="line">    &lt;/plugins&gt;</div><div class="line">  &lt;/build&gt;</div><div class="line"></div><div class="line">&lt;/project&gt;</div></pre></td></tr></table></figure>
+<p>这个 pom.xml 文件非常简单：</p>
+<ul>
+<li>声明了一个 vertx-core 依赖</li>
+<li>配置了maven-compiler-plugin 插件（使用的是<code>Java 8</code>）.</li>
+</ul>
+<blockquote>
+<p>第二点非常重要，<code>Vert.x</code> 只支持<code>Java 8</code>。</p>
+</blockquote>
+<h3 id="编码！"><a href="#编码！" class="headerlink" title="编码！"></a>编码！</h3><p>OK，我们已经创建了一个<code>pom.xml</code> 文件，接下来正式开始编码，创建 <code>src/main/java/name/quanke/study/vertx/first/MyFirstVerticle.java</code>文件，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">package name.quanke.study.vertx.first;</div><div class="line"></div><div class="line">import io.vertx.core.AbstractVerticle;</div><div class="line">import io.vertx.core.Future;</div><div class="line"></div><div class="line">public class MyFirstVerticle extends AbstractVerticle &#123;</div><div class="line"></div><div class="line">  @Override</div><div class="line">  public void start(Future&lt;Void&gt; fut) &#123;</div><div class="line">    vertx</div><div class="line">        .createHttpServer()</div><div class="line">        .requestHandler(r -&gt; &#123;</div><div class="line">          r.response().end(&quot;&lt;h1&gt;Hello from my first &quot; +</div><div class="line">              &quot;Vert.x 3 application&lt;/h1&gt;&quot;);</div><div class="line">        &#125;)</div><div class="line">        .listen(8080, result -&gt; &#123;</div><div class="line">          if (result.succeeded()) &#123;</div><div class="line">            fut.complete();</div><div class="line">          &#125; else &#123;</div><div class="line">            fut.fail(result.cause());</div><div class="line">          &#125;</div><div class="line">        &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个实际上不是最优秀的应用，这个类继承<code>AbstractVerticle</code>，在<code>Vert.x</code>的世界里<code>verticle</code>就是组件（是Vert.x的之行单元），通过继承<code>AbstractVerticle</code>类，获得<code>vertx</code>的入口。</p>
+<p>当<code>verticle</code>部署后会调用<code>start</code>方法，我们也能实现 <code>stop</code> 方法，在这个方法里回收资源，<code>start</code>方法接收<code>Future</code>对象的参数，可以告诉用户是执行完成还是报出错误，<code>Vert.x</code>是异步执行的，运行的时候不会等到<code>start</code>方法执行完成，所以 <code>Future</code> 参数是非常重要的，可以通知是否已经执行完成。</p>
+<p>在<code>start</code>方法里创建了一个HTTP 服务和一个请求处理器（handler），这个请求处理器使用lambda表达式，通过<code>requestHandler</code>方法，每次服务器收到请求，都会返回“Hello。。。”（也没有什么其他可以告诉你的东西了。。。），最后服务器绑定了一个8080端口，这里可能会失败（因为8080端口可能被使用了），通过lambda表达式检查是否连接成功，就想上面说的，调用fut.complete表示成功，调用 fut.fail 报告失败。</p>
+<p>使用下面的命令尝试着编译应用（首先你要安装好了maven，此命令在pom.xml目录下执行，知道使用maven的都懂得）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">mvn clean compile</div></pre></td></tr></table></figure>
+<p>如果幸运，编译应该是成功的。</p>
+<p>应用就编写到这里，是不是很简单？</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>应用开发完成了，但是我们从来都不是很认真的，所有我们需要测试一下，测试使用<code>JUnit</code> 和 <code>vertx-unit</code>。</p>
+<p>打开<code>pom.xml</code>文件，增加两个依赖（dependencies）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;junit&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;junit&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;4.12&lt;/version&gt;</div><div class="line">  &lt;scope&gt;test&lt;/scope&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;io.vertx&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;vertx-unit&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;3.0.0&lt;/version&gt;</div><div class="line">  &lt;scope&gt;test&lt;/scope&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>创建 <code>src/main/java/name/quanke/study/vertx/first/MyFirstVerticleTest.java</code> 文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">package name.quanke.study.vertx.first;</div><div class="line">import io.vertx.core.Vertx;</div><div class="line">import io.vertx.ext.unit.Async;</div><div class="line">import io.vertx.ext.unit.TestContext;</div><div class="line">import io.vertx.ext.unit.junit.VertxUnitRunner;</div><div class="line">import org.junit.After;</div><div class="line">import org.junit.Before;</div><div class="line">import org.junit.Test;</div><div class="line">import org.junit.runner.RunWith;</div><div class="line"></div><div class="line">@RunWith(VertxUnitRunner.class)</div><div class="line">public class MyFirstVerticleTest &#123;</div><div class="line"></div><div class="line">  private Vertx vertx;</div><div class="line"></div><div class="line">  @Before</div><div class="line">  public void setUp(TestContext context) &#123;</div><div class="line">    vertx = Vertx.vertx();</div><div class="line">    vertx.deployVerticle(MyFirstVerticle.class.getName(),</div><div class="line">        context.asyncAssertSuccess());</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  @After</div><div class="line">  public void tearDown(TestContext context) &#123;</div><div class="line">    vertx.close(context.asyncAssertSuccess());</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  @Test</div><div class="line">  public void testMyApplication(TestContext context) &#123;</div><div class="line">    final Async async = context.async();</div><div class="line"></div><div class="line">    vertx.createHttpClient().getNow(8080, &quot;localhost&quot;, &quot;/&quot;,</div><div class="line">     response -&gt; &#123;</div><div class="line">      response.handler(body -&gt; &#123;</div><div class="line">        context.assertTrue(body.toString().contains(&quot;Hello&quot;));</div><div class="line">        async.complete();</div><div class="line">      &#125;);</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这里使用<code>JUnit</code>测试<code>verticle</code>，也会使用到 <code>vertx-unit</code> 自定义的<code>runner</code>，<code>vert.x-unit</code>很容易测试异步的<code>vert.x</code>应用。</p>
+<p>在<code>setUp</code>方法里，创建了一个<code>Vertx</code>实例，<code>deploy</code>了<code>verticle</code> ,你可能已经注意到了，这与传统<code>JUnit</code>的<code>@Before</code>不一样，它接收了一个<code>TestContext</code>参数，<code>TestContext</code>对象让我们可以控制异步的测试，例如：当我们<code>deploy</code>了异步<code>verticle</code>，多个<code>Vertx</code>实例相互作用时，不能检测它的正确性，<code>deployVerticle</code>方法的第二个参数返回一个handler：<code>context.asyncAssertSuccess()</code>，如果<code>verticle</code>的状态是失败，那这个测试就是失败的，此外会等待<code>verticle</code>完成启动，还记得，在<code>verticle</code>里，我们调用了<code>fut.complete()</code>方法，直到等到调用<code>fut.complete()</code>方法才返回状态。</p>
+<p><code>tearDown</code>方法比较简单，负责回收我们创建的<code>vertx</code>对象。</p>
+<p>现在我们看一下测试应用的<code>testMyApplication</code>方法，给应用发出请求并且拦截一个返回，发出请求和接收答复都是异步的，我们需要一种方法来控制，<code>setUp</code>和<code>tearDown</code>方法接收一个<code>TestContext</code>对象，当这个测试完成的时候，通过我们这个对象创建的异步的处理器（<code>async</code>），通知测试框架（使用<code>async.complete()</code>）</p>
+<p>像这样，一个异步处理器创建好了，我们使用<code>getNow()</code>方法（<code>getNow()</code>方法是<code>get(...).end()</code>的捷径），创建一个HTTP客户端和发一个HTTP请求给我们的应用，响应使用<code>lambda</code>处理，通过另一个<code>lambda</code>的<code>handler</code>方法接收一个<code>response body</code>，这个<code>body</code>参数是这个<code>response body</code>（如<code>buffer</code>对象），检测<code>body</code>是否等于<code>“Hello”</code>字符串，并且宣布测试完成（<code>async.complete()</code>）。</p>
+<p>让我们花一个分钟的时间提一下这个断言，不像传统的使用<code>context.assert...</code>断言，如果断言失败，它会立即中断测试，因为<code>Vert.x</code> 程序各方面都是异步的,所以使用这种方式断言测试很重要。</p>
+<p>可以使用IDE或者Maven运行测试：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">mvn clean test</div></pre></td></tr></table></figure>
+<h3 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h3><p>总结一下，我们有了应用程序和测试，接下来，给应用打包，在这篇文章中我们把应用打 成<code>fat jar</code>包，一个 <code>fat jar</code>包是一个可以独立执行的<code>jar</code>文件，它包含所有的运行程序所需要的依赖，<code>Vert.x</code>使用这种打包的方式非常方便，仅仅只有一个文件，这使它非常容易执行。</p>
+<p>创建一个 <code>fat jar</code> 便捷<code>pom.xml</code>文件，把下面的的代码增加到<code>&lt;/plugins&gt;</code>标签之前：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;plugin&gt;</div><div class="line">        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;</div><div class="line">        &lt;version&gt;2.3&lt;/version&gt;</div><div class="line">        &lt;executions&gt;</div><div class="line">          &lt;execution&gt;</div><div class="line">            &lt;phase&gt;package&lt;/phase&gt;</div><div class="line">            &lt;goals&gt;</div><div class="line">              &lt;goal&gt;shade&lt;/goal&gt;</div><div class="line">            &lt;/goals&gt;</div><div class="line">            &lt;configuration&gt;</div><div class="line">              &lt;transformers&gt;</div><div class="line">                &lt;transformer</div><div class="line">                  implementation=&quot;org.apache.maven.plugins.shade.resource.ManifestResourceTransformer&quot;&gt;</div><div class="line">                  &lt;manifestEntries&gt;</div><div class="line">                    &lt;Main-Class&gt;io.vertx.core.Starter&lt;/Main-Class&gt;</div><div class="line">                    &lt;Main-Verticle&gt;name.quanke.study.vertx.first.MyFirstVerticle&lt;/Main-Verticle&gt;</div><div class="line">                  &lt;/manifestEntries&gt;</div><div class="line">                &lt;/transformer&gt;</div><div class="line">              &lt;/transformers&gt;</div><div class="line">              &lt;artifactSet/&gt;</div><div class="line">              &lt;outputFile&gt;$&#123;project.build.directory&#125;/$&#123;project.artifactId&#125;-$&#123;project.version&#125;-fat.jar&lt;/outputFile&gt;</div><div class="line">            &lt;/configuration&gt;</div><div class="line">          &lt;/execution&gt;</div><div class="line">        &lt;/executions&gt;</div><div class="line">      &lt;/plugin&gt;</div></pre></td></tr></table></figure>
+<p>使用<a href="https://maven.apache.org/plugins/maven-shade-plugin/" target="_blank" rel="external">maven-shade-plugin</a> 创建<code>fat jar</code>。在<code>manifestEntries</code>标签里声明我们的<code>verticle</code>，你也许不知道从哪里来的<code>Starter</code>类，实际上，它是在<code>vertx</code>实例化和部署<code>verticle</code>的时候就有创建。</p>
+<p>这个插件的配置就是这样，我们执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">mvn clean package</div></pre></td></tr></table></figure>
+<p>应该会创建一个<code>target/my-first-app-1.0-SNAPSHOT-fat.jar</code>，里面嵌入了应用所有的依赖（包含<code>vert.x</code>自己）。</p>
+<h3 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h3><p>嗯，很高兴拥有一个 <code>fal jar</code>,但我们希望看到我们的应用程序的运行！正如上面所说，多亏了<code>fat jar</code>包装，运行vert.x应用程序是容易的：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">java -jar target/my-first-app-1.0-SNAPSHOT-fat.jar</div></pre></td></tr></table></figure>
+<p>然后，打开浏览器访问 <a href="http://localhost:8080。" target="_blank" rel="external">http://localhost:8080。</a></p>
+<p><code>CTRL+C</code>停止应用运行。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这个Vert.x 3速成班告诉你，怎么使用Vert.x 3开发一个简单的应用，怎么测试、打包和运行，现在知道了在Vert.x 3 上任意创建令人惊奇的系统。接下来的时间看看<a href="http://quanke.name/2016/01/15/Vert-x-应用的配置/">怎么配置我们的应用</a>。</p>
+<p><em>Happy coding &amp; Stay tuned !</em></p>
+<p>本人英语比较烂，建议看<a href="http://vertx.io/blog/my-first-vert-x-3-application/index.html" target="_blank" rel="external">原文</a></p>
+
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">quanke.name</a>
+            
+        </div>
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/posts/54943/" class="pre-post btn btn-default"><i class="fa fa-angle-left fa-fw"></i>上一篇</a>
+    
+    
+        <a href="/posts/1815/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+	
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMzY4OS8xMDI0NA==">
+  <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+         if (typeof LivereTower === 'function') { return; }
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+  </script>
+</div>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">    
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢?">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget notification">
+        <h3 class="title">网站公告</h3>
+        <div>
+            <p>《Spring Boot 与 kotlin 实战》 系列教程上线<br/>
+专题：<a href="http://quanke.name/spring-boot-with-kotlin-in-action" title="fork me" target="_blank">《Spring Boot 与 kotlin 实战》</a> <br/>
+<hr>
+<img  width="100%" align="center" src="https://static.oschina.net/uploads/img/201711/08183543_ysUa.jpg">
+<hr>
+QQ交流群：370156529
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/quanke" rel="external nofollow" title="Github" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:caiquanke_88@163.com" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="//weibo.com/quankecai" rel="external nofollow" title="微博" target="_blank">
+			    	<i class="weibo fa fa-weibo"></i>
+			    </a>
+            
+	            <a href="//jq.qq.com/?_wv=1027&k=5MOKtIE" rel="external nofollow" title="QQ群" target="_blank">
+			    	<i class="users fa fa-users"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/es/"><i class="fa" aria-hidden="true">Elasticsearch</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/golang/"><i class="fa" aria-hidden="true">Go语言</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MBaaS-LiveOak系列/"><i class="fa" aria-hidden="true">MBaaS-LiveOak系列</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/rn/"><i class="fa" aria-hidden="true">React Native</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-Boot与kotlin实战/"><i class="fa" aria-hidden="true">Spring Boot与kotlin实战</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vertx/"><i class="fa" aria-hidden="true">Vert.x3 系列</i></a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/"><i class="fa" aria-hidden="true">android开发</i></a><span class="category-list-count">54</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/"><i class="fa" aria-hidden="true">git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ios/"><i class="fa" aria-hidden="true">ios开发</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/"><i class="fa" aria-hidden="true">node.js</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/use/"><i class="fa" aria-hidden="true">使用</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/bdata/"><i class="fa" aria-hidden="true">大数据</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/service/"><i class="fa" aria-hidden="true">服务端开发</i></a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/autotest/"><i class="fa" aria-hidden="true">自动化测试</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gof/"><i class="fa" aria-hidden="true">设计模式</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/se/"><i class="fa" aria-hidden="true">软件工程</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/essay/"><i class="fa" aria-hidden="true">随笔</i></a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/project/"><i class="fa" aria-hidden="true">项目实战</i></a><span class="category-list-count">1</span></li></ul>
+    </div>
+
+
+        
+        
+    <div class="widget">
+      <h3 class="title">归档</h3>
+        <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/"><i class="fa" aria-hidden="true">二月 2018</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">十二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/"><i class="fa" aria-hidden="true">十一月 2017</i></a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/"><i class="fa" aria-hidden="true">二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/"><i class="fa" aria-hidden="true">十月 2016</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/"><i class="fa" aria-hidden="true">七月 2016</i></a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/"><i class="fa" aria-hidden="true">五月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/"><i class="fa" aria-hidden="true">四月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/"><i class="fa" aria-hidden="true">一月 2016</i></a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/"><i class="fa" aria-hidden="true">八月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/"><i class="fa" aria-hidden="true">七月 2015</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/"><i class="fa" aria-hidden="true">五月 2015</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/"><i class="fa" aria-hidden="true">四月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/"><i class="fa" aria-hidden="true">十一月 2014</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/"><i class="fa" aria-hidden="true">六月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/"><i class="fa" aria-hidden="true">二月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/"><i class="fa" aria-hidden="true">一月 2013</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/"><i class="fa" aria-hidden="true">十二月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/"><i class="fa" aria-hidden="true">十一月 2012</i></a><span class="archive-list-count">40</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/"><i class="fa" aria-hidden="true">十月 2012</i></a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/"><i class="fa" aria-hidden="true">九月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/"><i class="fa" aria-hidden="true">八月 2012</i></a><span class="archive-list-count">4</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        <a href="/tags/API/" style="font-size: 13.33px;">API</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/android-pg/" style="font-size: 10px;">Android多渠道打包</a> <a href="/tags/es/" style="font-size: 16.67px;">Elasticsearch</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IOS/" style="font-size: 10px;">IOS</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/th-java/" style="font-size: 10px;">Java 编程思想</a> <a href="/tags/JavaEE/" style="font-size: 10px;">JavaEE</a> <a href="/tags/LiveOak/" style="font-size: 13.33px;">LiveOak</a> <a href="/tags/MBaaS/" style="font-size: 15px;">MBaaS</a> <a href="/tags/PM2/" style="font-size: 10px;">PM2</a> <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/rn/" style="font-size: 10px;">React Native</a> <a href="/tags/SDK/" style="font-size: 10px;">SDK</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/vertx-for-java/" style="font-size: 10px;">Vert.x Core手册 for Java</a> <a href="/tags/Vert-x3/" style="font-size: 20px;">Vert.x3</a> <a href="/tags/Vertx/" style="font-size: 20px;">Vertx</a> <a href="/tags/windows-install/" style="font-size: 10px;">Windows10安装</a> <a href="/tags/android/" style="font-size: 18.33px;">android</a> <a href="/tags/android-a/" style="font-size: 10px;">android动画</a> <a href="/tags/elasticsearch/" style="font-size: 11.67px;">elasticsearch</a> <a href="/tags/gitbook/" style="font-size: 10px;">gitbook</a> <a href="/tags/ios/" style="font-size: 10px;">ios</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/tags/logstash/" style="font-size: 11.67px;">logstash</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node-js-运行/" style="font-size: 10px;">node.js 运行</a> <a href="/tags/spirng-boot/" style="font-size: 10px;">spirng boot</a> <a href="/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/tags/swagger-ui/" style="font-size: 10px;">swagger ui</a> <a href="/tags/swagger-api/" style="font-size: 10px;">swagger-api</a> <a href="/tags/swagger-edit/" style="font-size: 10px;">swagger-edit</a> <a href="/tags/bdaga/" style="font-size: 16.67px;">大数据</a> <a href="/tags/opensouce/" style="font-size: 10px;">开源</a> <a href="/tags/conclusion/" style="font-size: 10px;">总结</a> <a href="/tags/api/" style="font-size: 10px;">接口文档</a> <a href="/tags/careful/" style="font-size: 10px;">注意</a> <a href="/tags/career-planning/" style="font-size: 10px;">职业规划</a> <a href="/tags/autotest/" style="font-size: 10px;">自动化测试</a> <a href="/tags/gof/" style="font-size: 10px;">设计模式</a> <a href="/tags/data/" style="font-size: 11.67px;">资料</a> <a href="/tags/test/" style="font-size: 10px;">软件测试</a>
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://quanke.name" class="fa" target="_blank">我全科博客</a>
+        
+            <a href="http://satra.gitee.io/blog/" class="fa" target="_blank">我在万达摆地摊</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12"> 
+                <span>Copyright &copy; 2017
+                </span> | 
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> | 
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+	<script src="/js/search.js?rev=@@hash"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+
+</body>
+</html>

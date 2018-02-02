@@ -1,0 +1,451 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="全科-不安分的码农">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://quanke.name">
+    <!--SEO-->
+
+
+
+
+
+<meta name="robots" content="all" />
+<meta name="google" content="all" />
+<meta name="googlebot" content="all" />
+<meta name="verify" content="all" />
+    <!--Title-->
+
+
+<title>已有Android工程 集成React Native 的那些事 | 全科-不安分的码农</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="全科-不安分的码农" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
+<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?853906ed403c461b2dbf1df696bdf998";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+	<script>
+		(function(i, s, o, g, r, a, m) {
+		    i['GoogleAnalyticsObject'] = r;
+		    i[r] = i[r] || function() {
+		        (i[r].q = i[r].q || []).push(arguments)
+		    }, i[r].l = 1 * new Date();
+		    a = s.createElement(o),
+		    m = s.getElementsByTagName(o)[0];
+		    a.async = 1;
+		    a.src = g;
+		    m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-82833335-5', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+
+    
+</head>
+
+
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header"  style="background-image:url(http://7xpw2b.com1.z0.glb.clouddn.com/hexo-sinppet/img/banner2.jpg)"  >
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="">
+            <img src="/img/avatar.jpg" alt="logo头像">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                 <img src="/img/branding.png" alt="Snippet 博客主题">  
+             
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                    </span>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>主页</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/free-books"><i class="fa fa-fw "></i>开源书籍</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>应用</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>开源</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="已有Android工程 集成React Native 的那些事">
+            
+	            已有Android工程 集成React Native 的那些事
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>React Native</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            React Native
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2017/02/28</span>
+    </span>
+</div>
+
+            
+            
+            <p class="fa fa-exclamation-triangle warning">
+                本文于<strong>339</strong>天之前发表，文中内容可能已经过时。
+            </p>
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <ul>
+<li>欢迎关注<a href="http://quanke.name/">http://quanke.name/</a></li>
+<li>转载请注明出处，谢谢</li>
+</ul>
+<p>2017年2月27日，天气晴，我永远记得这天，我心潮澎湃，因为终于把<a href="http://utantop.com/" target="_blank" rel="external">优谈TOP</a> 集成了React Native，从去年开始，公司陆陆续续的集成和学习React Native，通过demo的形式，写了不少组件和API，也能和后端调通，也多次，多个人尝试把优谈TOP集成React Native，但是每次都是失败的，因为缺少经验，不能直接通过错误判断原因，只能通过Google查找各种资料，慢慢解决，下面记录了我们，<a href="http://utantop.com/" target="_blank" rel="external">优谈TOP</a> 原生 集成React Native 的那些事。也许也是你的那些事？</p>
+<h3 id="常规思路："><a href="#常规思路：" class="headerlink" title="常规思路："></a>常规思路：</h3><p>通过百度搜索 <code>已有Android工程集成ReactNative</code> 出现一大堆教程，大部分教程都是通过在原来的基础上增加React Native的支持，比如这个：<a href="http://blog.csdn.net/jj120522/article/details/51982228" target="_blank" rel="external">《Android之原生项目集成React Native》</a> ，这也是官方推荐的集成方式，我也推荐这个，只是我这样，一直报错，有一个启动 MainaAtivity的错，一直过不去，所以我就换一种思路。。。</p>
+<h3 id="在React-Native基础上增加原生"><a href="#在React-Native基础上增加原生" class="headerlink" title="在React Native基础上增加原生"></a>在React Native基础上增加原生</h3><p>开始通过<a href="http://facebook.github.io/react-native/docs/getting-started.html#content" target="_blank" rel="external">官方文档安装和初始化</a>React Native项目。</p>
+<h4 id="创建和运行React-Native-项目"><a href="#创建和运行React-Native-项目" class="headerlink" title="创建和运行React Native 项目"></a>创建和运行React Native 项目</h4><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">react-native init UtanTop</div><div class="line"></div><div class="line">cd UtanTop</div><div class="line"></div><div class="line">react-native run-android</div></pre></td></tr></table></figure>
+<blockquote>
+<p>如果没有错,再继续。如果有错，说明你环境都没有安装好，哈哈。请参考<a href="http://reactnative.cn/docs/0.41/getting-started.html" target="_blank" rel="external">环境安装文档</a></p>
+</blockquote>
+<p>恭喜你，第一步搞定了。接下来，巨坑的地方要来了。</p>
+<h4 id="把原生的-build-gradle-文件先集成进去"><a href="#把原生的-build-gradle-文件先集成进去" class="headerlink" title="把原生的 build.gradle 文件先集成进去"></a>把原生的 <code>build.gradle</code> 文件先集成进去</h4><p>这一步比较简单，就是把<code>gradle</code>相关文件复制替换就可以了，你想的好简单哈。。。</p>
+<p><strong>我建议：</strong></p>
+<p>首先把原项目的gradle相关文件复制到新建的React Native项目，<em>不要破坏原来的React Native项目的配置</em>。</p>
+<blockquote>
+<p>如果原生项目里有Module，先不要把Module导入，为了保险，把最简单的导入。</p>
+</blockquote>
+<h5 id="修改Root-目录下的build-gradle"><a href="#修改Root-目录下的build-gradle" class="headerlink" title="修改Root 目录下的build.gradle"></a>修改Root 目录下的<code>build.gradle</code></h5><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"></div><div class="line">allprojects &#123;</div><div class="line">    repositories &#123;</div><div class="line">        mavenLocal()</div><div class="line">        jcenter()</div><div class="line">        maven &#123;</div><div class="line">            url &quot;http://192.168.1.205:8081/repository/utancenter/&quot;</div><div class="line">        &#125;</div><div class="line">        maven &#123;</div><div class="line">            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm</div><div class="line">            url &quot;$rootDir/../node_modules/react-native/android&quot;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果有其他maven仓库直接这么写就可以了。</p>
+<h5 id="配置app目录下的build-gradle"><a href="#配置app目录下的build-gradle" class="headerlink" title="配置app目录下的build.gradle"></a>配置app目录下的<code>build.gradle</code></h5><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">buildTypes &#123;</div><div class="line"></div><div class="line"></div><div class="line">//        release &#123;</div><div class="line">//            // 不显示Log</div><div class="line">//            buildConfigField &quot;boolean&quot;, &quot;LOG_DEBUG&quot;, &quot;false&quot;</div><div class="line">//</div><div class="line">//            minifyEnabled enableProguardInReleaseBuilds</div><div class="line">//            zipAlignEnabled true</div><div class="line">//            shrinkResources true</div><div class="line">//            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-project.txt&apos;</div><div class="line">//            signingConfig signingConfigs.release</div><div class="line">//</div><div class="line">//            applicationVariants.all &#123; variant -&gt;</div><div class="line">//                variant.outputs.each &#123; output -&gt;</div><div class="line">//                    def outputFile = output.outputFile</div><div class="line">//                    if (outputFile != null &amp;&amp; outputFile.name.endsWith(&apos;.apk&apos;)) &#123;</div><div class="line">//</div><div class="line">//                        //if (&quot;woman&quot;.equals(WOMAN))&#123;</div><div class="line">//                        //  def fileName = &quot;WomanTop_v$&#123;defaultConfig.versionName&#125;_$&#123;variant.productFlavors[0].name&#125;.apk&quot;</div><div class="line">//                        //output.outputFile = new File(outputFile.parent+File.separator+&quot;v&quot;+defaultConfig.versionName, fileName)</div><div class="line">//                        //&#125; else &#123;</div><div class="line">//                        def fileName = &quot;UtanTop_v$&#123;defaultConfig.versionName&#125;_$&#123;variant.productFlavors[0].name&#125;.apk&quot;</div><div class="line">//                        output.outputFile = new File(outputFile.parent + File.separator + &quot;v&quot; + defaultConfig.versionName, fileName)</div><div class="line">//                        //&#125;</div><div class="line">//</div><div class="line">//</div><div class="line">//                    &#125;</div><div class="line">//                &#125;</div><div class="line">//            &#125;</div><div class="line">//        &#125;</div><div class="line"></div><div class="line">        release &#123;</div><div class="line">            minifyEnabled enableProguardInReleaseBuilds</div><div class="line">            proguardFiles getDefaultProguardFile(&quot;proguard-android.txt&quot;), &quot;proguard-rules.pro&quot;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>贴这个的意思就是先把打渠道包的去掉，使用React Native生成的配置，之后打渠道包在说，记得把下面几段也要先注释掉。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"></div><div class="line">//    // 多渠道打包</div><div class="line">//    productFlavors &#123;</div><div class="line"></div><div class="line">//        T1 &#123;&#125;</div><div class="line">//        T2 &#123;&#125;</div><div class="line">//        T3 &#123;&#125;</div><div class="line">//</div><div class="line">//    &#125;</div><div class="line">//</div><div class="line">//    productFlavors.all &#123; flavor -&gt;</div><div class="line">//        flavor.manifestPlaceholders = [CHANNEL_VALUE: name]</div><div class="line">//    &#125;</div></pre></td></tr></table></figure>
+<p>如果集成友盟的多渠道包，还需要在<code>AndroidManifest.xml</code>中注释掉。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;meta-data</div><div class="line">           android:name=&quot;UMENG_APPKEY&quot;</div><div class="line">           android:value=&quot;$&#123;UMENG_APPKEY&#125;&quot; /&gt;</div></pre></td></tr></table></figure>
+<p>在这个时候我们还没集成源码，再执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">react-native run-android</div></pre></td></tr></table></figure>
+<blockquote>
+<p>如果编译通过，恭喜你，如果没有过那是正常的，因为还有一个坑。</p>
+</blockquote>
+<p>我的报错信息是</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"></div><div class="line">* What went wrong:</div><div class="line">Execution failed for task &apos;:app:packageAllDebugClassesForMultiDex&apos;.</div><div class="line">&gt; java.util.zip.ZipException: duplicate entry: bolts/AggregateException.class</div></pre></td></tr></table></figure>
+<p>是因为导入了重复的条目。</p>
+<blockquote>
+<p>可能是在某些某些gradle版本才有吧。。。</p>
+</blockquote>
+<p>我的解决方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">compile(&apos;com.facebook.fresco:fresco:0.10.0&apos;) &#123;</div><div class="line">    exclude group: &apos;com.parse.bolts&apos;,</div><div class="line">            module: &apos;bolts-android&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">compile (&apos;com.facebook.fresco:animated-gif:0.10.0&apos;)&#123;</div><div class="line">    exclude group: &apos;com.parse.bolts&apos;,</div><div class="line">            module: &apos;bolts-android&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这时候再执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">react-native run-android</div></pre></td></tr></table></figure>
+<p>现在问题应该不大了，按道理可以运行起来了，反正我的运行起来了，但是还没有加入源码。。。</p>
+<h5 id="现在就把java-res-libs-assets-目录下的文件和-AndroidManifest-xml-复制到React-Native项目中。"><a href="#现在就把java-res-libs-assets-目录下的文件和-AndroidManifest-xml-复制到React-Native项目中。" class="headerlink" title="现在就把java res libs assets 目录下的文件和 AndroidManifest.xml 复制到React Native项目中。"></a>现在就把<code>java</code> <code>res</code> <code>libs</code> <code>assets</code> 目录下的文件和 <code>AndroidManifest.xml</code> 复制到React Native项目中。</h5><p>把<code>MainApplication</code> 集成你原生项目的<code>Application</code> </p>
+<blockquote>
+<p>一般项目都会自定一个<code>Application</code></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public class MainApplication extends UtanToutiaoApp implements ReactApplication &#123;</div><div class="line"></div><div class="line">  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) &#123;</div><div class="line">    @Override</div><div class="line">    public boolean getUseDeveloperSupport() &#123;</div><div class="line">      return BuildConfig.DEBUG;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected List&lt;ReactPackage&gt; getPackages() &#123;</div><div class="line">      return Arrays.&lt;ReactPackage&gt;asList(</div><div class="line">          new MainReactPackage()</div><div class="line">      );</div><div class="line">    &#125;</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  @Override</div><div class="line">  public ReactNativeHost getReactNativeHost() &#123;</div><div class="line">    return mReactNativeHost;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  @Override</div><div class="line">  public void onCreate() &#123;</div><div class="line">    super.onCreate();</div><div class="line">    SoLoader.init(this, /* native exopackage */ false);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：不要把<code>MainActivity</code> <code>MainApplication</code> ,文件覆盖了。</p>
+</blockquote>
+<p>再执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">react-native run-android</div></pre></td></tr></table></figure>
+<p>应该可以成功了，如果默认启动的是<code>MainActivity</code>，那展示的就是React Native 界面，如果默认不是<code>MainActivity</code>，那就通过下面的方式启动。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"></div><div class="line">Intent i = new Intent(context, MainReactActivity.class);</div><div class="line">    </div><div class="line">context.startActivity(i);</div></pre></td></tr></table></figure>
+<p>到这里我反正就ok了，不知道你ok了没？</p>
+<p>如果不OK ，请留言，一起探讨。。</p>
+<p>还有我在学习和使用React Native 之后也会贴出来供大伙参考。。请关注 quanke</p>
+
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">quanke.name</a>
+            
+        </div>
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/posts/108/" class="pre-post btn btn-default"><i class="fa fa-angle-left fa-fw"></i>上一篇</a>
+    
+    
+        <a href="/posts/55306/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+	
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMzY4OS8xMDI0NA==">
+  <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+         if (typeof LivereTower === 'function') { return; }
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+  </script>
+</div>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">    
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢?">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget notification">
+        <h3 class="title">网站公告</h3>
+        <div>
+            <p>《Spring Boot 与 kotlin 实战》 系列教程上线<br/>
+专题：<a href="http://quanke.name/spring-boot-with-kotlin-in-action" title="fork me" target="_blank">《Spring Boot 与 kotlin 实战》</a> <br/>
+<hr>
+<img  width="100%" align="center" src="https://static.oschina.net/uploads/img/201711/08183543_ysUa.jpg">
+<hr>
+QQ交流群：370156529
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/quanke" rel="external nofollow" title="Github" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:caiquanke_88@163.com" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="//weibo.com/quankecai" rel="external nofollow" title="微博" target="_blank">
+			    	<i class="weibo fa fa-weibo"></i>
+			    </a>
+            
+	            <a href="//jq.qq.com/?_wv=1027&k=5MOKtIE" rel="external nofollow" title="QQ群" target="_blank">
+			    	<i class="users fa fa-users"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/es/"><i class="fa" aria-hidden="true">Elasticsearch</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/golang/"><i class="fa" aria-hidden="true">Go语言</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MBaaS-LiveOak系列/"><i class="fa" aria-hidden="true">MBaaS-LiveOak系列</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/rn/"><i class="fa" aria-hidden="true">React Native</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-Boot与kotlin实战/"><i class="fa" aria-hidden="true">Spring Boot与kotlin实战</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vertx/"><i class="fa" aria-hidden="true">Vert.x3 系列</i></a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/"><i class="fa" aria-hidden="true">android开发</i></a><span class="category-list-count">54</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/"><i class="fa" aria-hidden="true">git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ios/"><i class="fa" aria-hidden="true">ios开发</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/"><i class="fa" aria-hidden="true">node.js</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/use/"><i class="fa" aria-hidden="true">使用</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/bdata/"><i class="fa" aria-hidden="true">大数据</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/service/"><i class="fa" aria-hidden="true">服务端开发</i></a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/autotest/"><i class="fa" aria-hidden="true">自动化测试</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gof/"><i class="fa" aria-hidden="true">设计模式</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/se/"><i class="fa" aria-hidden="true">软件工程</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/essay/"><i class="fa" aria-hidden="true">随笔</i></a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/project/"><i class="fa" aria-hidden="true">项目实战</i></a><span class="category-list-count">1</span></li></ul>
+    </div>
+
+
+        
+        
+    <div class="widget">
+      <h3 class="title">归档</h3>
+        <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/"><i class="fa" aria-hidden="true">二月 2018</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">十二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/"><i class="fa" aria-hidden="true">十一月 2017</i></a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/"><i class="fa" aria-hidden="true">二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/"><i class="fa" aria-hidden="true">十月 2016</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/"><i class="fa" aria-hidden="true">七月 2016</i></a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/"><i class="fa" aria-hidden="true">五月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/"><i class="fa" aria-hidden="true">四月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/"><i class="fa" aria-hidden="true">一月 2016</i></a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/"><i class="fa" aria-hidden="true">八月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/"><i class="fa" aria-hidden="true">七月 2015</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/"><i class="fa" aria-hidden="true">五月 2015</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/"><i class="fa" aria-hidden="true">四月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/"><i class="fa" aria-hidden="true">十一月 2014</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/"><i class="fa" aria-hidden="true">六月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/"><i class="fa" aria-hidden="true">二月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/"><i class="fa" aria-hidden="true">一月 2013</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/"><i class="fa" aria-hidden="true">十二月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/"><i class="fa" aria-hidden="true">十一月 2012</i></a><span class="archive-list-count">40</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/"><i class="fa" aria-hidden="true">十月 2012</i></a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/"><i class="fa" aria-hidden="true">九月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/"><i class="fa" aria-hidden="true">八月 2012</i></a><span class="archive-list-count">4</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        <a href="/tags/API/" style="font-size: 13.33px;">API</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/android-pg/" style="font-size: 10px;">Android多渠道打包</a> <a href="/tags/es/" style="font-size: 16.67px;">Elasticsearch</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IOS/" style="font-size: 10px;">IOS</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/th-java/" style="font-size: 10px;">Java 编程思想</a> <a href="/tags/JavaEE/" style="font-size: 10px;">JavaEE</a> <a href="/tags/LiveOak/" style="font-size: 13.33px;">LiveOak</a> <a href="/tags/MBaaS/" style="font-size: 15px;">MBaaS</a> <a href="/tags/PM2/" style="font-size: 10px;">PM2</a> <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/rn/" style="font-size: 10px;">React Native</a> <a href="/tags/SDK/" style="font-size: 10px;">SDK</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/vertx-for-java/" style="font-size: 10px;">Vert.x Core手册 for Java</a> <a href="/tags/Vert-x3/" style="font-size: 20px;">Vert.x3</a> <a href="/tags/Vertx/" style="font-size: 20px;">Vertx</a> <a href="/tags/windows-install/" style="font-size: 10px;">Windows10安装</a> <a href="/tags/android/" style="font-size: 18.33px;">android</a> <a href="/tags/android-a/" style="font-size: 10px;">android动画</a> <a href="/tags/elasticsearch/" style="font-size: 11.67px;">elasticsearch</a> <a href="/tags/gitbook/" style="font-size: 10px;">gitbook</a> <a href="/tags/ios/" style="font-size: 10px;">ios</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/tags/logstash/" style="font-size: 11.67px;">logstash</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node-js-运行/" style="font-size: 10px;">node.js 运行</a> <a href="/tags/spirng-boot/" style="font-size: 10px;">spirng boot</a> <a href="/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/tags/swagger-ui/" style="font-size: 10px;">swagger ui</a> <a href="/tags/swagger-api/" style="font-size: 10px;">swagger-api</a> <a href="/tags/swagger-edit/" style="font-size: 10px;">swagger-edit</a> <a href="/tags/bdaga/" style="font-size: 16.67px;">大数据</a> <a href="/tags/opensouce/" style="font-size: 10px;">开源</a> <a href="/tags/conclusion/" style="font-size: 10px;">总结</a> <a href="/tags/api/" style="font-size: 10px;">接口文档</a> <a href="/tags/careful/" style="font-size: 10px;">注意</a> <a href="/tags/career-planning/" style="font-size: 10px;">职业规划</a> <a href="/tags/autotest/" style="font-size: 10px;">自动化测试</a> <a href="/tags/gof/" style="font-size: 10px;">设计模式</a> <a href="/tags/data/" style="font-size: 11.67px;">资料</a> <a href="/tags/test/" style="font-size: 10px;">软件测试</a>
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://quanke.name" class="fa" target="_blank">我全科博客</a>
+        
+            <a href="http://satra.gitee.io/blog/" class="fa" target="_blank">我在万达摆地摊</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12"> 
+                <span>Copyright &copy; 2017
+                </span> | 
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> | 
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+	<script src="/js/search.js?rev=@@hash"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+
+</body>
+</html>

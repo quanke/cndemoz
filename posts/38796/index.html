@@ -1,0 +1,424 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="全科-不安分的码农">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://quanke.name">
+    <!--SEO-->
+
+
+
+
+
+<meta name="robots" content="all" />
+<meta name="google" content="all" />
+<meta name="googlebot" content="all" />
+<meta name="verify" content="all" />
+    <!--Title-->
+
+
+<title>如何成为优秀的软件模型设计者? | 全科-不安分的码农</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="全科-不安分的码农" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
+<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?853906ed403c461b2dbf1df696bdf998";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+	<script>
+		(function(i, s, o, g, r, a, m) {
+		    i['GoogleAnalyticsObject'] = r;
+		    i[r] = i[r] || function() {
+		        (i[r].q = i[r].q || []).push(arguments)
+		    }, i[r].l = 1 * new Date();
+		    a = s.createElement(o),
+		    m = s.getElementsByTagName(o)[0];
+		    a.async = 1;
+		    a.src = g;
+		    m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-82833335-5', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+
+    
+</head>
+
+
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header"  style="background-image:url(http://7xpw2b.com1.z0.glb.clouddn.com/hexo-sinppet/img/banner2.jpg)"  >
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="">
+            <img src="/img/avatar.jpg" alt="logo头像">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                 <img src="/img/branding.png" alt="Snippet 博客主题">  
+             
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                    </span>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>主页</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/free-books"><i class="fa fa-fw "></i>开源书籍</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>应用</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>开源</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="如何成为优秀的软件模型设计者?">
+            
+	            如何成为优秀的软件模型设计者?
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>软件工程</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            null
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2012/09/26</span>
+    </span>
+</div>
+
+            
+            
+            <p class="fa fa-exclamation-triangle warning">
+                本文于<strong>1955</strong>天之前发表，文中内容可能已经过时。
+            </p>
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>模型设计是软件架构师所需具备的基本技能之一，本文是一篇不错的关于如何成为优秀模型设计者的文章，希望对大家有所帮助！ ——Sunny</p>
+<pre><code>我们期待自己成为一个优秀的软件模型设计者，但是，要怎样做，又从哪里开始呢？
+</code></pre><p>　　将下列原则应用到你的软件工程中，你会获得立杆见影的成果。</p>
+<p>　　1. 人远比技术重要<br>　　你开发软件是为了供别人使用，没有人使用的软件只是没有意义的数据的集合而已。许多在软件方面很有成就的行家在他们事业的初期却表现平平，因为他们那时侯将主要精力都集中在技术上。显然，构件（components），EJB（Enterprise Java Beans）和代理（agent）是很有趣的东西。但是对于用户来说，如果你设计的软件很难使用或者不能满足他们的需求，后台用再好的技术也于事无补。多花点时间到软件需求和设计一个使用户能很容易理解的界面上。</p>
+<p>　　2. 理解你要实现的东西<br>　　好的软件设计人员把大多数时间花费在建立系统模型上，偶尔写一些源代码，但那只不过是为了验证设计过程中所遇到的问题。这将使他们的设计方案更加可行。</p>
+<p>　　3. 谦虚是必须的品格<br>　　你不可能知道一切，你甚至要很努力才能获得足够用的知识。软件开发是一项复杂而艰巨的工作，因为软件开发所用到的工具和技术是在不断更新的。而且，一个人也不可能了解软件开发的所有过程。在日常生活中你每天接触到的新鲜事物可能不会太多。但是对于从事软件开发的人来说，每天可以学习很多新东西（如果愿意的话）。</p>
+<p>　　4. 需求就是需求<br>　　如果你没有任何需求，你就不要动手开发任何软件。成功的软件取决于时间（在用户要求的时间内完成）、预算和是否满足用户的需求。如果你不能确切知道用户需要的是什么，或者软件的需求定义，那么你的工程注定会失败。</p>
+<p>　　5. 需求其实很少改变，改变的是你对需求的理解<br>　　Object ToolSmiths公司的Doug Smith常喜欢说：“分析是一门科学，设计是一门艺术”。他的意思是说在众多的“正确”分析模型中只存在一个最“正确”分析模型可以完全满足解决某个具体问题的需要（我理解的意思是需求分析需要一丝不苟、精确的完成,而设计的时候反而可以发挥创造力和想象力 - 译者注）。<br>　　如果需求经常改动，很可能是你没有作好需求分析，并不是需求真的改变了。<br>　　你可以抱怨用户不能告诉你他们想得到什么，但是不要忘记，收集需求信息是你工作。<br>　　你可以说是新来的开发人员把事情搞得一团糟，但是，你应该确定在工程的第一天就告诉他们应该做什么和怎样去做。<br>　　如果你觉得公司不让你与用户充分接触，那只能说明公司的管理层并不是真正支持你的项目。<br>　　你可以抱怨公司有关软件工程的管理制度不合理，但你必须了解大多同行公司是怎么做的。<br>　　你可以借口说你们的竞争对手的成功是因为他们有了一个新的理念，但是为什么你没先想到呢？<br>　　需求真正改变的情况很少，但是没有做好需求分析工作的理由却很多。</p>
+<p>　　6. 经常阅读<br>　　在这个每日都在发生变化的产业中，你不可能在已取得的成就上陶醉太久。<br>　　每个月至少读2、3本专业杂志或者1本专业书籍。保持不落伍需要付出很多的时间和金钱，但会使你成为一个很有实力的竞争者。</p>
+<p>　　7. 降低软件模块间的耦合度<br>　　高耦合度的系统是很难维护的。一处的修改引起另一处甚至更多处的变动。<br>　　你可以通过以下方法降低程序的耦合度：隐藏实现细节，强制构件接口定义，不使用公用数据结构，不让应用程序直接操作数据库（我的经验法则是：当应用程序员在写SQL代码的时候，你的程序的耦合度就已经很高了）。<br>　　耦合度低的软件可以很容易被重用、维护和扩充。</p>
+<p>　　8. 提高软件的内聚性<br>　　如果一个软件的模块只实现一个功能，那么该模块具有高内聚性。高内聚性的软件更容易维护和改进。<br>　　判断一个模块是否有高的内聚性，看一看你是否能够用一个简单的句子描述它的功能就行了。如果你用了一段话或者你需要使用类似“和”、“或”等连词，则说明你需要将该模块细化。<br>　　只有高内聚性的模块才可能被重用。</p>
+<p>　　9. 考虑软件的移植性<br>　　移植是软件开发中一项具体而又实际的工作，不要相信某些软件工具的广告宣传（比如java 的宣传口号write once run many ? 译者注）。<br>　　即使仅仅对软件进行常规升级，也要把这看得和向另一个操作系统或数据库移植一样重要。<br>　　记得从16位Windows移植到32位windows的“乐趣”吗 ？当你使用了某个操作系统的特性，如它的进程间通信(IPC)策略，或用某数据库专有语言写了存储过程。你的软件和那个特定的产品结合度就已经很高了。<br>　　好的软件设计者把那些特有的实现细节打包隐藏起来，所以，当那些特性该变的时候，你的仅仅需要更新那个包就可以了。</p>
+<p>　　10. 接受变化<br>　　这是一句老话了：唯一不变的只有变化。<br>　　你应该将所有系统将可能发生的变化以及潜在需求记录下来,以便将来能够实现（参见“Architecting for Change”，Thinking Objectively, May 1999）<br>　　通过在建模期间考虑这些假设的情况，你就有可能开发出足够强壮且容易维护的软件。设计强壮的软件是你最基本的目标。</p>
+<p>　　11. 不要低估对软件规模的需求<br>　　Internet 带给我们的最大的教训是你必须在软件开发的最初阶段就考虑软件规模的可扩充性。<br>　　今天只有100人的部门使用的应用程序，明天可能会被有好几万人的组织使用，下月，通过因特网可能会有几百万人使用它。<br>　　在软件设计的初期，根据在用例模型中定义的必须支持的基本事务处理，确定软件的基本功能。然后，在建造系统的时候再逐步加入比较常用的功能。<br>　　在设计的开始考虑软件的规模需求，避免在用户群突然增大的情况下，重写软件。</p>
+<p>　　12. 性能仅仅是很多设计因素之一<br>　　关注软件设计中的一个重要因素–性能，这好象也是用户最关心的事情。一个性能不佳的软件将不可避免被重写。<br>　　但是你的设计还必须具有可靠性，可用性，便携性和可扩展性。你应该在工程开始就应该定义并区分好这些因素，以便在工作中恰当使用。性能可以是，也可以不是优先级最高的因素，我的观点是，给每个设计因素应有的考虑。</p>
+<p>　　13. 管理接口<br>　　“UML User Guide”（Grady Booch，Ivar Jacobson和Jim Rumbaugh ,Addison Wesley, 1999）中指出，你应该在开发阶段的早期就定义软件模块之间的接口。<br>　　这有助于你的开发人员全面理解软件的设计结构并取得一致意见，让各模块开发小组相对独立的工作。一旦模块的接口确定之后，模块怎样实现就不是很重要了。<br>　　从根本上说，如果你不能够定义你的模块“从外部看上去会是什么样子”，你肯定也不清楚模块内要实现什么。</p>
+<p>　　14. 走近路需要更长的时间<br>　　在软件开发中没有捷径可以走。<br>　　缩短你的在需求分析上花的时间，结果只能是开发出来的软件不能满足用户的需求，必须被重写。<br>　　在软件建模上每节省一周，在将来的编码阶段可能会多花几周时间，因为你在全面思考之前就动手写程序。<br>　　你为了节省一天的测试时间而漏掉了一个bug，在将来的维护阶段，可能需要花几周甚至几个月的时间去修复。与其如此，还不如重新安排一下项目计划。<br>　　避免走捷径，只做一次但要做对（do it once by doing it right）。</p>
+<p>　　15. 别信赖任何人<br>　　产品和服务销售公司不是你的朋友，你的大部分员工和高层管理人员也不是。<br>　　大部分产品供应商希望把你牢牢绑在他们的产品上，可能是操作系统，数据库或者某个开发工具。<br>　　大部分的顾问和承包商只关心你的钱并不是你的工程（停止向他们付款，看一看他们会在周围呆多长时间）。<br>　　大部分程序员认为他们自己比其他人更优秀，他们可能抛弃你设计的模型而用自己认为更好的。<br>　　只有良好的沟通才能解决这些问题。<br>　　要明确的是，不要只依靠一家产品或服务提供商，即使你的公司（或组织）已经在建模、文档和过程等方面向那个公司投入了很多钱。</p>
+<p>　　16. 证明你的设计在实践中可行<br>　　在设计的时候应当先建立一个技术原型， 或者称为“端到端”原型。以证明你的设计是能够工作的。<br>　　你应该在开发工作的早期做这些事情，因为，如果软件的设计方案是不可行的，在编码实现阶段无论采取什么措施都于事无补。技术原型将证明你的设计的可行性，从而，你的设计将更容易获得支持。</p>
+<p>　　17. 应用已知的模式<br>　　目前，我们有大量现成的分析和设计模式以及问题的解决方案可以使用。<br>　　一般来说，好的模型设计和开发人员，都会避免重新设计已经成熟的并被广泛应用的东西。<br>         <a href="http://www.ambysoft.com/processPatternsPage.html" target="_blank" rel="external">http://www.ambysoft.com/processPatternsPage.html</a> 收藏了许多开发模式的信息。</p>
+<p>　　18. 研究每个模型的长处和弱点<br>　　目前有很多种类的模型可以使用。用例捕获的是系统行为需求，数据模型则描述支持一个系统运行所需要的数据构成。你可能会试图在用例中加入实际数据描述，但是，这对开发者不是非常有用。同样，数据模型对描述软件需求来说是无用的。每个模型在你建模过程中有其相应的位置，但是，你需要明白在什么地方，什么时候使用它们。</p>
+<p>　　19. 在现有任务中应用多个模型<br>　　当你收集需求的时候，考虑使用用例模型，用户界面模型和领域级的类模型。<br>　　当你设计软件的时候，应该考虑制作类模型，顺序图、状态图、协作图和最终的软件实际物理模型。<br>　　程序设计人员应该慢慢意识到，仅仅使用一个模型而实现的软件要么不能够很好地满足用户的需求，要么很难扩展。</p>
+<p>　　20. 教育你的听众<br>　　你花了很大力气建立一个很成熟的系统模型，而你的听众却不能理解它们，甚至更糟－连为什么要先建立模型都不知道。那么你的工作是毫无意义的。<br>　　教给你开发人员基本的建模知识；否则，他们会只看看你画的漂亮图表，然后继续编写不规范的程序。<br>　　另外， 你还需要告诉你的用户一些需求建模的基础知识。给他们解释你的用例(uses case)和用户界面模型，以使他们能够明白你要表达地东西。当每个人都能使用一个通用的设计语言的时候（比如UML-译者注），你的团队才能实现真正的合作。</p>
+<p>　　21. 用工具的傻瓜还是傻瓜<br>　　你给我CAD/CAM工具，请我设计一座桥。但是，如果那座桥建成的话，我肯定不想当第一个从桥上过的人，因为我对建筑一窍不通。<br>　　使用一个很优秀的CASE工具并不能使你成为一个建模专家，只能使你成为一个优秀CASE工具的使用者。成为一个优秀的建模专家需要多年的积累，不会是一周针对某个价值几千美元工具的培训。一个优秀的CASE工具是很重要，但你必须学习使用它，并能够使用它设计它支持的模型。</p>
+<p>　　22. 理解完整的过程<br>　　好的设计人员应该理解整个软件过程，尽管他们可能不是精通全部实现细节。<br>　　软件开发是一个很复杂的过程，还记得《object-oriented software process》第36页的内容吗？除了编程、建模、测试等你擅长工作外，还有很多工作要做。<br>　　好的设计者需要考虑全局。必须从长远考虑如何使软件满足用户需要，如何提供维护和技术支持等。</p>
+<p>　　23. 常做测试，早做测试<br>　　如果测试对你的软件来说是无所谓的，那么你的软件多半也没什么必要被开发出来。<br>　　建立一个技术原型供技术评审使用，以检验你的软件模型。<br>　　在软件生命周期中，越晚发现的错误越难修改，修改成本越昂贵。尽可能早的做测试是很值得的。</p>
+<p>　　24. 把你的工作归档<br>　　不值得归档的工作往往也不值得做。归档你的设想，以及根据设想做出的决定；归档软件模型中很重要但不很明显的部分。 给每个模型一些概要描述以使别人很快明白模型所表达的内容。</p>
+<p>　　25. 技术会变，基本原理不会<br>　　如果有人说“使用某种开发语言、某个工具或某某技术，我们就不需要再做需求分析，建模，编码或测试”。不要相信，这只说明他还缺乏经验。抛开技术和人的因素，实际上软件开发的基本原理自20世纪70年代以来就没有改变过。你必须还定义需求，建模，编码，测试，配置，面对风险，发布产品，管理工作人员等等。<br>　　软件建模技术是需要多年的实际工作才能完全掌握的。好在你可以从我的建议开始，完善你们自己的软件开发经验。</p>
+<p>　　从鸡汤开始，加入自己的蔬菜。然后，开始享受你自己的丰盛晚餐吧。<br>       【转自：<a href="http://dev.yesky.com/SoftChannel/72342389024358400/20050115/1901524.shtml】" target="_blank" rel="external">http://dev.yesky.com/SoftChannel/72342389024358400/20050115/1901524.shtml】</a></p>
+
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">quanke.name</a>
+            
+        </div>
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/posts/29409/" class="pre-post btn btn-default"><i class="fa fa-angle-left fa-fw"></i>上一篇</a>
+    
+    
+        <a href="/posts/58864/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+	
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMzY4OS8xMDI0NA==">
+  <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+         if (typeof LivereTower === 'function') { return; }
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+  </script>
+</div>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">    
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢?">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget notification">
+        <h3 class="title">网站公告</h3>
+        <div>
+            <p>《Spring Boot 与 kotlin 实战》 系列教程上线<br/>
+专题：<a href="http://quanke.name/spring-boot-with-kotlin-in-action" title="fork me" target="_blank">《Spring Boot 与 kotlin 实战》</a> <br/>
+<hr>
+<img  width="100%" align="center" src="https://static.oschina.net/uploads/img/201711/08183543_ysUa.jpg">
+<hr>
+QQ交流群：370156529
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/quanke" rel="external nofollow" title="Github" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:caiquanke_88@163.com" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="//weibo.com/quankecai" rel="external nofollow" title="微博" target="_blank">
+			    	<i class="weibo fa fa-weibo"></i>
+			    </a>
+            
+	            <a href="//jq.qq.com/?_wv=1027&k=5MOKtIE" rel="external nofollow" title="QQ群" target="_blank">
+			    	<i class="users fa fa-users"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/es/"><i class="fa" aria-hidden="true">Elasticsearch</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/golang/"><i class="fa" aria-hidden="true">Go语言</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MBaaS-LiveOak系列/"><i class="fa" aria-hidden="true">MBaaS-LiveOak系列</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/rn/"><i class="fa" aria-hidden="true">React Native</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-Boot与kotlin实战/"><i class="fa" aria-hidden="true">Spring Boot与kotlin实战</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vertx/"><i class="fa" aria-hidden="true">Vert.x3 系列</i></a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/"><i class="fa" aria-hidden="true">android开发</i></a><span class="category-list-count">54</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/"><i class="fa" aria-hidden="true">git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ios/"><i class="fa" aria-hidden="true">ios开发</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/"><i class="fa" aria-hidden="true">node.js</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/use/"><i class="fa" aria-hidden="true">使用</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/bdata/"><i class="fa" aria-hidden="true">大数据</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/service/"><i class="fa" aria-hidden="true">服务端开发</i></a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/autotest/"><i class="fa" aria-hidden="true">自动化测试</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gof/"><i class="fa" aria-hidden="true">设计模式</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/se/"><i class="fa" aria-hidden="true">软件工程</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/essay/"><i class="fa" aria-hidden="true">随笔</i></a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/project/"><i class="fa" aria-hidden="true">项目实战</i></a><span class="category-list-count">1</span></li></ul>
+    </div>
+
+
+        
+        
+    <div class="widget">
+      <h3 class="title">归档</h3>
+        <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/"><i class="fa" aria-hidden="true">二月 2018</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">十二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/"><i class="fa" aria-hidden="true">十一月 2017</i></a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/"><i class="fa" aria-hidden="true">二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/"><i class="fa" aria-hidden="true">十月 2016</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/"><i class="fa" aria-hidden="true">七月 2016</i></a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/"><i class="fa" aria-hidden="true">五月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/"><i class="fa" aria-hidden="true">四月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/"><i class="fa" aria-hidden="true">一月 2016</i></a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/"><i class="fa" aria-hidden="true">八月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/"><i class="fa" aria-hidden="true">七月 2015</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/"><i class="fa" aria-hidden="true">五月 2015</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/"><i class="fa" aria-hidden="true">四月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/"><i class="fa" aria-hidden="true">十一月 2014</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/"><i class="fa" aria-hidden="true">六月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/"><i class="fa" aria-hidden="true">二月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/"><i class="fa" aria-hidden="true">一月 2013</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/"><i class="fa" aria-hidden="true">十二月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/"><i class="fa" aria-hidden="true">十一月 2012</i></a><span class="archive-list-count">40</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/"><i class="fa" aria-hidden="true">十月 2012</i></a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/"><i class="fa" aria-hidden="true">九月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/"><i class="fa" aria-hidden="true">八月 2012</i></a><span class="archive-list-count">4</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        <a href="/tags/API/" style="font-size: 13.33px;">API</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/android-pg/" style="font-size: 10px;">Android多渠道打包</a> <a href="/tags/es/" style="font-size: 16.67px;">Elasticsearch</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IOS/" style="font-size: 10px;">IOS</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/th-java/" style="font-size: 10px;">Java 编程思想</a> <a href="/tags/JavaEE/" style="font-size: 10px;">JavaEE</a> <a href="/tags/LiveOak/" style="font-size: 13.33px;">LiveOak</a> <a href="/tags/MBaaS/" style="font-size: 15px;">MBaaS</a> <a href="/tags/PM2/" style="font-size: 10px;">PM2</a> <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/rn/" style="font-size: 10px;">React Native</a> <a href="/tags/SDK/" style="font-size: 10px;">SDK</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/vertx-for-java/" style="font-size: 10px;">Vert.x Core手册 for Java</a> <a href="/tags/Vert-x3/" style="font-size: 20px;">Vert.x3</a> <a href="/tags/Vertx/" style="font-size: 20px;">Vertx</a> <a href="/tags/windows-install/" style="font-size: 10px;">Windows10安装</a> <a href="/tags/android/" style="font-size: 18.33px;">android</a> <a href="/tags/android-a/" style="font-size: 10px;">android动画</a> <a href="/tags/elasticsearch/" style="font-size: 11.67px;">elasticsearch</a> <a href="/tags/gitbook/" style="font-size: 10px;">gitbook</a> <a href="/tags/ios/" style="font-size: 10px;">ios</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/tags/logstash/" style="font-size: 11.67px;">logstash</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node-js-运行/" style="font-size: 10px;">node.js 运行</a> <a href="/tags/spirng-boot/" style="font-size: 10px;">spirng boot</a> <a href="/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/tags/swagger-ui/" style="font-size: 10px;">swagger ui</a> <a href="/tags/swagger-api/" style="font-size: 10px;">swagger-api</a> <a href="/tags/swagger-edit/" style="font-size: 10px;">swagger-edit</a> <a href="/tags/bdaga/" style="font-size: 16.67px;">大数据</a> <a href="/tags/opensouce/" style="font-size: 10px;">开源</a> <a href="/tags/conclusion/" style="font-size: 10px;">总结</a> <a href="/tags/api/" style="font-size: 10px;">接口文档</a> <a href="/tags/careful/" style="font-size: 10px;">注意</a> <a href="/tags/career-planning/" style="font-size: 10px;">职业规划</a> <a href="/tags/autotest/" style="font-size: 10px;">自动化测试</a> <a href="/tags/gof/" style="font-size: 10px;">设计模式</a> <a href="/tags/data/" style="font-size: 11.67px;">资料</a> <a href="/tags/test/" style="font-size: 10px;">软件测试</a>
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://quanke.name" class="fa" target="_blank">我全科博客</a>
+        
+            <a href="http://satra.gitee.io/blog/" class="fa" target="_blank">我在万达摆地摊</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12"> 
+                <span>Copyright &copy; 2017
+                </span> | 
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> | 
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+	<script src="/js/search.js?rev=@@hash"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+
+</body>
+</html>

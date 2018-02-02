@@ -1,0 +1,470 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="全科-不安分的码农">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://quanke.name">
+    <!--SEO-->
+
+
+
+
+
+<meta name="robots" content="all" />
+<meta name="google" content="all" />
+<meta name="googlebot" content="all" />
+<meta name="verify" content="all" />
+    <!--Title-->
+
+
+<title>Vert.x 通过异步的方式使用JDBC连接SQL | 全科-不安分的码农</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="全科-不安分的码农" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
+<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?853906ed403c461b2dbf1df696bdf998";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+	<script>
+		(function(i, s, o, g, r, a, m) {
+		    i['GoogleAnalyticsObject'] = r;
+		    i[r] = i[r] || function() {
+		        (i[r].q = i[r].q || []).push(arguments)
+		    }, i[r].l = 1 * new Date();
+		    a = s.createElement(o),
+		    m = s.getElementsByTagName(o)[0];
+		    a.async = 1;
+		    a.src = g;
+		    m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-82833335-5', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+
+    
+</head>
+
+
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header"  style="background-image:url(http://7xpw2b.com1.z0.glb.clouddn.com/hexo-sinppet/img/banner2.jpg)"  >
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="">
+            <img src="/img/avatar.jpg" alt="logo头像">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                 <img src="/img/branding.png" alt="Snippet 博客主题">  
+             
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                    </span>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>主页</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/free-books"><i class="fa fa-fw "></i>开源书籍</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>应用</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>开源</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Vert.x 通过异步的方式使用JDBC连接SQL">
+            
+	            Vert.x 通过异步的方式使用JDBC连接SQL
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>Vert.x3 系列</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            Vert.x3
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2016/01/16</span>
+    </span>
+</div>
+
+            
+            
+            <p class="fa fa-exclamation-triangle warning">
+                本文于<strong>748</strong>天之前发表，文中内容可能已经过时。
+            </p>
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <ul>
+<li>欢迎关注<a href="http://quanke.name/">http://quanke.name/</a></li>
+<li>交流群：<code>231419585</code></li>
+<li>转载请注明出处，谢谢</li>
+</ul>
+<p>在这篇文章中，我们将会看到怎样在vert.x应用中使用<a href="http://hsqldb.org/" target="_blank" rel="external">HSQL</a>，当然也可以使用任意JDBC，以及使用vertx-jdbc-client提供的异步的API，这篇文章的代码在<a href="https://github.com/quanke/vertx3_study_demo/tree/master/my-vertx-first-app-jdbc" target="_blank" rel="external">github</a>上。</p>
+<h3 id="异步？"><a href="#异步？" class="headerlink" title="异步？"></a>异步？</h3><p>vert.x一个很重要的特点就是它的异步性。使用异步的API，不需要等结果返回，当有结果返回时，vert.x会主动通知。为了说明这个，我们来看一个简单的例子。</p>
+<p>我们假设有个<code>add</code>方法。一般来说，会像<code>int r = add(1, 1)</code>这样来使用它。这是一个同步的API，所以你必须等到返回结果。异步的API会是这样：<code>add(1, 1, r -&gt; { /*do something with the result*/})</code>。在这个版本中，你传入了一个Handler，当结果计算出来时才被调用。这个方法不返回任何东西，实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">public void add(int a, int b, Handler&lt;Integer&gt; resultHandler) &#123;</div><div class="line">    int r = a + b;</div><div class="line">    resultHandler.handle(r);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>为了避免混淆概念，异步API并不是多线程。像我们在add例子里看到的，并没有涉及多线程。</p>
+<h3 id="异步JDBC"><a href="#异步JDBC" class="headerlink" title="异步JDBC"></a>异步JDBC</h3><p>看了一些基本的异步的API，现在了解下<code>vertx-jdbc-client</code>。这个组件能够让我们通过<code>JDBC driver</code>与数据库交互。这些交互都是异步的，以前这样：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">String sql = &quot;SELECT * FROM Products&quot;;</div><div class="line">ResultSet rs = stmt.executeQuery(sql);</div></pre></td></tr></table></figure>
+<p>现在要这样：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">connection.query(&quot;SELECT * FROM Products&quot;, result -&gt; &#123;</div><div class="line">        // do something with the result</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>这个模型更高效，当结果出来后vert.x通知，避免了等待结果。</p>
+<h3 id="增加maven依赖"><a href="#增加maven依赖" class="headerlink" title="增加maven依赖"></a>增加maven依赖</h3><p>在<code>pom.xml</code>文件中增加两个 <code>Maven dependencies</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;io.vertx&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;vertx-jdbc-client&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;3.1.0&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;org.hsqldb&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;hsqldb&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;2.3.3&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>第一个依赖提供了<code>vertx-jdbc-client</code>，第二个提供了<code>HSQL JDBC</code>的驱动。如果你想使用另外一个数据库，修改这个依赖，同时你还需要修改<code>JDBC url</code>和<code>JDBC driver</code>名。</p>
+<h3 id="初始化JDBC-client"><a href="#初始化JDBC-client" class="headerlink" title="初始化JDBC client"></a>初始化JDBC client</h3><p>创建JDBC 客户端（client）：</p>
+<p>在<code>MyFirstVerticle</code>类中，声明一个新变量<code>JDBCClient jdbc</code>，并且在<code>start</code>方法中添加：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">jdbc = JDBCClient.createShared(vertx, config(), &quot;My-Whisky-Collection&quot;);</div></pre></td></tr></table></figure>
+<p>创建了一个JDBC client实例，使用verticle的配置文件配置JDBC client。这个配置文件需要提供下面的配置才能让JDBC client正常工作：</p>
+<ul>
+<li>url－JDBC url，例如：<code>jdbc:hsqldb:mem:db?shutdown=true</code></li>
+<li>_driver class－JDBC的驱动，例如：<code>org.hsqldb.jdbcDriver</code></li>
+</ul>
+<p>有了client，接下来需要连接数据库。连接数据库是通过使用<code>jdbc.getConnection</code>来实现的，<code>jdbc.getConnection</code>需要传入一个<code>Handler&lt;AsyncResult&lt;SQLConnection&gt;&gt;</code>参数。我们深入的了解下这个类型。首先，这是一个<code>Handler</code>，因此当结果准备好时它就会被调用。这个结果是<code>AsyncResult&lt;SQLConnection&gt;</code>的一个实例。<code>AsyncResult</code>是<code>vert.x</code>提供的一个结构，使用它能够知道连接数据库的操作是成功或失败了。如果成功了，它就会提供一个结果，这里结果是一个<code>SQLConnection</code>的实例。</p>
+<p>当你接收一个<code>AsyncResult</code>的实例时，代码通常是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">if (ar.failed()) &#123;</div><div class="line">  System.err.println(&quot;The operation has failed...: &quot;</div><div class="line">      + ar.cause().getMessage());</div><div class="line">&#125; else &#123;</div><div class="line">  // Use the result:</div><div class="line">  result = ar.result();</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>需要获取到<code>SQLConnection</code>，然后启动<code>rest</code>的应用。因为变成了异步的，这需要改变启动应用的方式。因此，如果将启动序列划分成多块：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">startBackend(</div><div class="line"> (connection) -&gt; createSomeData(connection,</div><div class="line">     (nothing) -&gt; startWebApp(</div><div class="line">         (http) -&gt; completeStartup(http, fut)</div><div class="line">     ), fut</div><div class="line"> ), fut);</div></pre></td></tr></table></figure>
+<ul>
+<li><code>startBackend</code>- 获取<code>SQLConnection</code>对象，然后调用下一步</li>
+<li><code>createSomeData</code>- 初始化数据库并插入数据。当完成后，调用下一步</li>
+<li><code>startWebApp</code>- 启动web应用</li>
+<li><code>completeStartup</code>- 最后完成启动</li>
+</ul>
+<p><code>fut</code>由vert.x传入，通知已经启动或者启动过程中遇到的问题。</p>
+<p><code>startBackend</code>方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void startBackend(Handler&lt;AsyncResult&lt;SQLConnection&gt;&gt; next, Future&lt;Void&gt; fut) &#123;</div><div class="line">    jdbc.getConnection(ar -&gt; &#123;</div><div class="line">      if (ar.failed()) &#123;</div><div class="line">        fut.fail(ar.cause());</div><div class="line">      &#125; else &#123;</div><div class="line">        next.handle(Future.succeededFuture(ar.result()));</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>这个方法获取了一个SQLConnection对象，检查操作是否完成。如果成功，会调用下一步。失败了，就会报告一个错误。其他的方法遵循同样的模式：</p>
+<ul>
+<li>检查上一步操作是否成功</li>
+<li>处理业务逻辑</li>
+<li>调用下一步</li>
+</ul>
+<h3 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h3><p>客户端已经准备好了，现在写SQL。从<code>createSomeData</code>方法开始，这个方法也是启动顺序中的一部分：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void createSomeData(AsyncResult&lt;SQLConnection&gt; result,</div><div class="line">    Handler&lt;AsyncResult&lt;Void&gt;&gt; next, Future&lt;Void&gt; fut) &#123;</div><div class="line">    if (result.failed()) &#123;</div><div class="line">      fut.fail(result.cause());</div><div class="line">    &#125; else &#123;</div><div class="line">      SQLConnection connection = result.result();</div><div class="line">      connection.execute(</div><div class="line">          &quot;CREATE TABLE IF NOT EXISTS Whisky (id INTEGER IDENTITY, name varchar(100), &quot; +</div><div class="line">          &quot;origin varchar(100))&quot;,</div><div class="line">          ar -&gt; &#123;</div><div class="line">            if (ar.failed()) &#123;</div><div class="line">              fut.fail(ar.cause());</div><div class="line">              connection.close();</div><div class="line">              return;</div><div class="line">            &#125;</div><div class="line">            connection.query(&quot;SELECT * FROM Whisky&quot;, select -&gt; &#123;</div><div class="line">              if (select.failed()) &#123;</div><div class="line">                fut.fail(ar.cause());</div><div class="line">                connection.close();</div><div class="line">                return;</div><div class="line">              &#125;</div><div class="line">              if (select.result().getNumRows() == 0) &#123;</div><div class="line">                insert(</div><div class="line">                    new Whisky(&quot;Bowmore 15 Years Laimrig&quot;, &quot;Scotland, Islay&quot;),</div><div class="line">                    connection,</div><div class="line">                    (v) -&gt; insert(new Whisky(&quot;Talisker 57° North&quot;, &quot;Scotland, Island&quot;),</div><div class="line">                        connection,</div><div class="line">                        (r) -&gt; &#123;</div><div class="line">                          next.handle(Future.&lt;Void&gt;succeededFuture());</div><div class="line">                          connection.close();</div><div class="line">                        &#125;));                                                    </div><div class="line">              &#125; else &#123;</div><div class="line">                next.handle(Future.&lt;Void&gt;succeededFuture());</div><div class="line">                connection.close();</div><div class="line">              &#125;</div><div class="line">            &#125;);</div><div class="line">          &#125;);</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>这个方法检查<code>SQLConnection</code>是否可用，然后执行一些SQL语句。首先，如果表不存在就创建表。看看下面代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">connection.execute(</div><div class="line">    SQL statement,</div><div class="line">    handler called when the statement has been executed</div><div class="line">)</div></pre></td></tr></table></figure>
+<p><code>handler</code>接收<code>AsyncResult&lt;Void&gt;</code>，例如：只有是通知而已，没有实际返回的结果。</p>
+<h5 id="关闭连接"><a href="#关闭连接" class="headerlink" title="关闭连接"></a>关闭连接</h5><p><em>操作完成后，别忘了关闭SQL链接。这个连接会被放入连接池并且可以被重复利用。</em></p>
+<p>在这个<code>handler</code>的代码里，检查了<code>statement</code>是否正确的执行了，如果正确，我们接下来检查表是否含有数据，如果没有，将会使用<code>insert</code>方法插入数据：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void insert(Whisky whisky, SQLConnection connection, Handler&lt;AsyncResult&lt;Whisky&gt;&gt; next) &#123;</div><div class="line">  String sql = &quot;INSERT INTO Whisky (name, origin) VALUES ?, ?&quot;;</div><div class="line">  connection.updateWithParams(sql,</div><div class="line">      new JsonArray().add(whisky.getName()).add(whisky.getOrigin()),</div><div class="line">      (ar) -&gt; &#123;</div><div class="line">        if (ar.failed()) &#123;</div><div class="line">          next.handle(Future.failedFuture(ar.cause()));</div><div class="line">          return;</div><div class="line">        &#125;</div><div class="line">        UpdateResult result = ar.result();</div><div class="line">        // Build a new whisky instance with the generated id.</div><div class="line">        Whisky w = new Whisky(result.getKeys().getInteger(0), whisky.getName(), whisky.getOrigin());</div><div class="line">        next.handle(Future.succeededFuture(w));</div><div class="line">      &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法使用带有INSERT（插入）statement（声明）的<code>upateWithParams</code>方法，且传入了值。这个方法避免了<code>SQL</code>注入。一旦statement执行了（当数据库没有此条数据就会创建），就创建一个新的<code>Whisky</code>对象，自动生成ID。</p>
+<h3 id="带有数据库（SQL）的REST"><a href="#带有数据库（SQL）的REST" class="headerlink" title="带有数据库（SQL）的REST"></a>带有数据库（SQL）的REST</h3><p>上面的方法都是启动顺序的一部分。但是，关于调用REST API的方法又是怎么样的呢？以<code>getAll</code>方法为例。这个方法被web应用前端调用，并检索存储的所有的产品：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void getAll(RoutingContext routingContext) &#123;</div><div class="line">    jdbc.getConnection(ar -&gt; &#123;</div><div class="line">      SQLConnection connection = ar.result();</div><div class="line">      connection.query(&quot;SELECT * FROM Whisky&quot;, result -&gt; &#123;</div><div class="line">        List&lt;Whisky&gt; whiskies = result.result().getRows().stream().map(Whisky::new).collect(Collectors.toList());</div><div class="line">        routingContext.response()</div><div class="line">            .putHeader(&quot;content-type&quot;, &quot;application/json; charset=utf-8&quot;)</div><div class="line">            .end(Json.encodePrettily(whiskies));</div><div class="line">        connection.close(); // Close the connection        </div><div class="line">      &#125;);</div><div class="line">    &#125;);</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>这个方法获得了一个<code>SQLConnection</code>对象，然后发出一个查询。一旦获取到查询结果，它会像之前的方法一样写<code>HTTP response</code>。<code>getOne</code>、<code>deleteOne</code>、<code>updateOne</code>和<code>addOne</code>方法都是一样的。注意，在response之后，需要要关闭SQL连接。</p>
+<p>看下传入到query方法的handler提供的结果。获取了一个包含了查询结果的ResultSet。每一行都是一个JsonObject，因此，如果你有一个数据对象使用JsonObject作为唯一的参数，那么创建这个对象很简单。</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>需要小小的更新下测试程序，增加配置<code>JDBCClient</code>。在<code>MyFirstVerticleTest</code>类中，将<code>setUp</code>方法中创建的<code>DeploymentOption</code>对象修改成：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">DeploymentOptions options = new DeploymentOptions()</div><div class="line">        .setConfig(new JsonObject()</div><div class="line">            .put(&quot;http.port&quot;, port)</div><div class="line">            .put(&quot;url&quot;, &quot;jdbc:hsqldb:mem:test?shutdown=true&quot;)</div><div class="line">            .put(&quot;driver_class&quot;, &quot;org.hsqldb.jdbcDriver&quot;)</div><div class="line">        );</div></pre></td></tr></table></figure>
+<p>除了<code>http.port</code>，还配置了<code>JDBC url</code>和<code>JDBC</code>驱动。测试时，使用的是一个内存数据库。在<code>src/test/resources/my-it-config.json</code>文件中也要做同样的修改。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;http.port&quot;: $&#123;http.port&#125;,</div><div class="line">  &quot;url&quot;: &quot;jdbc:hsqldb:mem:it-test?shutdown=true&quot;,</div><div class="line">  &quot;driver_class&quot;: &quot;org.hsqldb.jdbcDriver&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>src/main/conf/my-application-conf.json</code>文件也同样需要修改，这不是为了测试，而是为了运行这个应用：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;http.port&quot; : 8082,</div><div class="line">  &quot;url&quot;: &quot;jdbc:hsqldb:file:db/whiskies&quot;,</div><div class="line">  &quot;driver_class&quot;: &quot;org.hsqldb.jdbcDriver&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里这个<code>JDBC url</code>和上一个文件的有点不一样，因为需要将数据库存储到硬盘中。</p>
+<h3 id="展示时间！"><a href="#展示时间！" class="headerlink" title="展示时间！"></a>展示时间！</h3><p>开始构建程序：</p>
+<p><code>mvn clean package</code></p>
+<p>没有修改API（没有更改发布的java文件和REST接口），测试应该是可以顺利的运行的。</p>
+<p>启动应用：</p>
+<p><code>java -jar target/my-first-app-1.0-SNAPSHOT-fat.jar -conf src/main/conf/my-application-conf.json</code></p>
+<p>访问<code>http://localhost:8082/assets/index.html</code>，然后，你可以看到这个应用使用的是数据库了。这一次，就算重启应用，这些数据仍然在，因为存储产品被持久化到硬盘里了。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这篇文章中，知道了怎么在<code>vert.x</code>里使用<code>JDBC</code>数据库，并没有很多复杂的东西。开始可能会被这个异步的开发模型惊讶到，但是，一旦你开始使用了，你就很难再回去了。</p>
+<p>下一次，我们将看到这个应用怎么使用mongoDB来替换HSQL。</p>
+<p><em>Stay tuned, and happy coding !</em></p>
+
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">quanke.name</a>
+            
+        </div>
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/posts/3468/" class="pre-post btn btn-default"><i class="fa fa-angle-left fa-fw"></i>上一篇</a>
+    
+    
+        <a href="/posts/43843/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+	
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMzY4OS8xMDI0NA==">
+  <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+         if (typeof LivereTower === 'function') { return; }
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+  </script>
+</div>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">    
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢?">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget notification">
+        <h3 class="title">网站公告</h3>
+        <div>
+            <p>《Spring Boot 与 kotlin 实战》 系列教程上线<br/>
+专题：<a href="http://quanke.name/spring-boot-with-kotlin-in-action" title="fork me" target="_blank">《Spring Boot 与 kotlin 实战》</a> <br/>
+<hr>
+<img  width="100%" align="center" src="https://static.oschina.net/uploads/img/201711/08183543_ysUa.jpg">
+<hr>
+QQ交流群：370156529
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/quanke" rel="external nofollow" title="Github" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:caiquanke_88@163.com" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="//weibo.com/quankecai" rel="external nofollow" title="微博" target="_blank">
+			    	<i class="weibo fa fa-weibo"></i>
+			    </a>
+            
+	            <a href="//jq.qq.com/?_wv=1027&k=5MOKtIE" rel="external nofollow" title="QQ群" target="_blank">
+			    	<i class="users fa fa-users"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/es/"><i class="fa" aria-hidden="true">Elasticsearch</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/golang/"><i class="fa" aria-hidden="true">Go语言</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MBaaS-LiveOak系列/"><i class="fa" aria-hidden="true">MBaaS-LiveOak系列</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/rn/"><i class="fa" aria-hidden="true">React Native</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-Boot与kotlin实战/"><i class="fa" aria-hidden="true">Spring Boot与kotlin实战</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vertx/"><i class="fa" aria-hidden="true">Vert.x3 系列</i></a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/"><i class="fa" aria-hidden="true">android开发</i></a><span class="category-list-count">54</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/"><i class="fa" aria-hidden="true">git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ios/"><i class="fa" aria-hidden="true">ios开发</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/"><i class="fa" aria-hidden="true">node.js</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/use/"><i class="fa" aria-hidden="true">使用</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/bdata/"><i class="fa" aria-hidden="true">大数据</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/service/"><i class="fa" aria-hidden="true">服务端开发</i></a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/autotest/"><i class="fa" aria-hidden="true">自动化测试</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gof/"><i class="fa" aria-hidden="true">设计模式</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/se/"><i class="fa" aria-hidden="true">软件工程</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/essay/"><i class="fa" aria-hidden="true">随笔</i></a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/project/"><i class="fa" aria-hidden="true">项目实战</i></a><span class="category-list-count">1</span></li></ul>
+    </div>
+
+
+        
+        
+    <div class="widget">
+      <h3 class="title">归档</h3>
+        <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/"><i class="fa" aria-hidden="true">二月 2018</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">十二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/"><i class="fa" aria-hidden="true">十一月 2017</i></a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/"><i class="fa" aria-hidden="true">二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/"><i class="fa" aria-hidden="true">十月 2016</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/"><i class="fa" aria-hidden="true">七月 2016</i></a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/"><i class="fa" aria-hidden="true">五月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/"><i class="fa" aria-hidden="true">四月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/"><i class="fa" aria-hidden="true">一月 2016</i></a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/"><i class="fa" aria-hidden="true">八月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/"><i class="fa" aria-hidden="true">七月 2015</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/"><i class="fa" aria-hidden="true">五月 2015</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/"><i class="fa" aria-hidden="true">四月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/"><i class="fa" aria-hidden="true">十一月 2014</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/"><i class="fa" aria-hidden="true">六月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/"><i class="fa" aria-hidden="true">二月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/"><i class="fa" aria-hidden="true">一月 2013</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/"><i class="fa" aria-hidden="true">十二月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/"><i class="fa" aria-hidden="true">十一月 2012</i></a><span class="archive-list-count">40</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/"><i class="fa" aria-hidden="true">十月 2012</i></a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/"><i class="fa" aria-hidden="true">九月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/"><i class="fa" aria-hidden="true">八月 2012</i></a><span class="archive-list-count">4</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        <a href="/tags/API/" style="font-size: 13.33px;">API</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/android-pg/" style="font-size: 10px;">Android多渠道打包</a> <a href="/tags/es/" style="font-size: 16.67px;">Elasticsearch</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IOS/" style="font-size: 10px;">IOS</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/th-java/" style="font-size: 10px;">Java 编程思想</a> <a href="/tags/JavaEE/" style="font-size: 10px;">JavaEE</a> <a href="/tags/LiveOak/" style="font-size: 13.33px;">LiveOak</a> <a href="/tags/MBaaS/" style="font-size: 15px;">MBaaS</a> <a href="/tags/PM2/" style="font-size: 10px;">PM2</a> <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/rn/" style="font-size: 10px;">React Native</a> <a href="/tags/SDK/" style="font-size: 10px;">SDK</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/vertx-for-java/" style="font-size: 10px;">Vert.x Core手册 for Java</a> <a href="/tags/Vert-x3/" style="font-size: 20px;">Vert.x3</a> <a href="/tags/Vertx/" style="font-size: 20px;">Vertx</a> <a href="/tags/windows-install/" style="font-size: 10px;">Windows10安装</a> <a href="/tags/android/" style="font-size: 18.33px;">android</a> <a href="/tags/android-a/" style="font-size: 10px;">android动画</a> <a href="/tags/elasticsearch/" style="font-size: 11.67px;">elasticsearch</a> <a href="/tags/gitbook/" style="font-size: 10px;">gitbook</a> <a href="/tags/ios/" style="font-size: 10px;">ios</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/tags/logstash/" style="font-size: 11.67px;">logstash</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node-js-运行/" style="font-size: 10px;">node.js 运行</a> <a href="/tags/spirng-boot/" style="font-size: 10px;">spirng boot</a> <a href="/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/tags/swagger-ui/" style="font-size: 10px;">swagger ui</a> <a href="/tags/swagger-api/" style="font-size: 10px;">swagger-api</a> <a href="/tags/swagger-edit/" style="font-size: 10px;">swagger-edit</a> <a href="/tags/bdaga/" style="font-size: 16.67px;">大数据</a> <a href="/tags/opensouce/" style="font-size: 10px;">开源</a> <a href="/tags/conclusion/" style="font-size: 10px;">总结</a> <a href="/tags/api/" style="font-size: 10px;">接口文档</a> <a href="/tags/careful/" style="font-size: 10px;">注意</a> <a href="/tags/career-planning/" style="font-size: 10px;">职业规划</a> <a href="/tags/autotest/" style="font-size: 10px;">自动化测试</a> <a href="/tags/gof/" style="font-size: 10px;">设计模式</a> <a href="/tags/data/" style="font-size: 11.67px;">资料</a> <a href="/tags/test/" style="font-size: 10px;">软件测试</a>
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://quanke.name" class="fa" target="_blank">我全科博客</a>
+        
+            <a href="http://satra.gitee.io/blog/" class="fa" target="_blank">我在万达摆地摊</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12"> 
+                <span>Copyright &copy; 2017
+                </span> | 
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> | 
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+	<script src="/js/search.js?rev=@@hash"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+
+</body>
+</html>

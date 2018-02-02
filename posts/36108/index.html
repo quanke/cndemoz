@@ -1,0 +1,490 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="全科-不安分的码农">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://quanke.name">
+    <!--SEO-->
+
+
+
+
+
+<meta name="robots" content="all" />
+<meta name="google" content="all" />
+<meta name="googlebot" content="all" />
+<meta name="verify" content="all" />
+    <!--Title-->
+
+
+<title>Vert.x 实现REST | 全科-不安分的码农</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="全科-不安分的码农" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
+<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?853906ed403c461b2dbf1df696bdf998";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+	<script>
+		(function(i, s, o, g, r, a, m) {
+		    i['GoogleAnalyticsObject'] = r;
+		    i[r] = i[r] || function() {
+		        (i[r].q = i[r].q || []).push(arguments)
+		    }, i[r].l = 1 * new Date();
+		    a = s.createElement(o),
+		    m = s.getElementsByTagName(o)[0];
+		    a.async = 1;
+		    a.src = g;
+		    m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-82833335-5', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+
+    
+</head>
+
+
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header"  style="background-image:url(http://7xpw2b.com1.z0.glb.clouddn.com/hexo-sinppet/img/banner2.jpg)"  >
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="">
+            <img src="/img/avatar.jpg" alt="logo头像">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                 <img src="/img/branding.png" alt="Snippet 博客主题">  
+             
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                    </span>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>主页</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/free-books"><i class="fa fa-fw "></i>开源书籍</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>应用</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>开源</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Vert.x 实现REST">
+            
+	            Vert.x 实现REST
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>Vert.x3 系列</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            Vert.x3
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2016/01/15</span>
+    </span>
+</div>
+
+            
+            
+            <p class="fa fa-exclamation-triangle warning">
+                本文于<strong>749</strong>天之前发表，文中内容可能已经过时。
+            </p>
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <ul>
+<li>欢迎关注<a href="http://quanke.name/">http://quanke.name/</a></li>
+<li>交流群：<code>231419585</code></li>
+<li>转载请注明出处，谢谢</li>
+</ul>
+<h3 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h3><p>在第一篇文章中开发了一个非常简单的Vert.x 3应用程序，还包括怎么测试、打包和执行。在第二篇文章中对端口进行了可变配置。</p>
+<p>这篇文章中，开发一个CRUD（增删改查）应用，发布一个HTML页面，通过REST API与后台进行交互。RESTfull形式的API不简单，这篇文章中就不涉及了。</p>
+<p>接下来，能看到：</p>
+<ul>
+<li>Vert.x Web - 使用Vert.x创建Web应用的框架</li>
+<li>怎么发布静态资源</li>
+<li>怎么开发REST API</li>
+</ul>
+<p>这篇文章开发的代码放在<a href="https://github.com/quanke/vertx3_study_demo/tree/master/my-vertx-first-app-rest" target="_blank" rel="external">GitHub</a>上，是从第二篇文章的代码基础上进行的。</p>
+<h3 id="开始Vert-x-Web"><a href="#开始Vert-x-Web" class="headerlink" title="开始Vert.x Web"></a>开始Vert.x Web</h3><p>如果你看了<a href="http://quanke.name/2016/01/15/Vert-x-%E5%BA%94%E7%94%A8%E7%9A%84%E9%85%8D%E7%BD%AE/">前面的文章</a>，使用Vert.x Core来处理复杂的HTTP应用还是很麻烦的，所以就有了<a href="http://vertx.io/docs/vertx-web/java/" target="_blank" rel="external">Vert.x Web</a>，它可以使Vert.x开发一个web应用更加简单，而且不会改变Vert.x的思想。</p>
+<p>更新pom.xml文件，添加下面的依赖：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;io.vertx&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;vertx-web&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;3.0.0&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>这就是使用Vert.x Web的唯一前提。</p>
+<p>还记得在上一篇文章中，当请求<code>http://localhost:8080</code>时，返回一个<em>Hello World</em>消息，使用Vert.x Web完成同样的事情，打开<code>name.quanke.study.vertx.first.MyFirstVerticle.java</code> 类，修改<code>start</code>方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">@Override</div><div class="line">public void start(Future&lt;Void&gt; fut) &#123;</div><div class="line"> // Create a router object.</div><div class="line"> Router router = Router.router(vertx);</div><div class="line"></div><div class="line"> // Bind &quot;/&quot; to our hello message - so we are still compatible.</div><div class="line"> router.route(&quot;/&quot;).handler(routingContext -&gt; &#123;</div><div class="line">   HttpServerResponse response = routingContext.response();</div><div class="line">   response</div><div class="line">       .putHeader(&quot;content-type&quot;, &quot;text/html&quot;)</div><div class="line">       .end(&quot;&lt;h1&gt;Hello from my first Vert.x 3 application&lt;/h1&gt;&quot;);</div><div class="line"> &#125;);</div><div class="line"></div><div class="line"> // Create the HTTP server and pass the &quot;accept&quot; method to the request handler.</div><div class="line"> vertx</div><div class="line">     .createHttpServer()</div><div class="line">     .requestHandler(router::accept)</div><div class="line">     .listen(</div><div class="line">         // Retrieve the port from the configuration,</div><div class="line">         // default to 8080.</div><div class="line">         config().getInteger(&quot;http.port&quot;, 8080),</div><div class="line">         result -&gt; &#123;</div><div class="line">           if (result.succeeded()) &#123;</div><div class="line">             fut.complete();</div><div class="line">           &#125; else &#123;</div><div class="line">             fut.fail(result.cause());</div><div class="line">           &#125;</div><div class="line">         &#125;</div><div class="line">     );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在开始start方法里创建了一个<code>Router</code>对象。router是Vert.x Web的基础，负责分发HTTP请求到handler（处理器），在Vert.x Web中还有两个很重要的概念。</p>
+<ul>
+<li>Routes-定义请求的分发 </li>
+<li>Handlers-这是实际处理请求并且返回结果的地方。Handlers可以被链接起来使用。</li>
+</ul>
+<p>如果明白了这3个概念（Router、Routes、Handlers），就明白了Vert.x Web的所有了。</p>
+<p>仔细看看下面这段代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">router.route(&quot;/&quot;).handler(routingContext -&gt; &#123;</div><div class="line">  HttpServerResponse response = routingContext.response();</div><div class="line">  response</div><div class="line">      .putHeader(&quot;content-type&quot;, &quot;text/html&quot;)</div><div class="line">      .end(&quot;&lt;h1&gt;Hello from my first Vert.x 3 application&lt;/h1&gt;&quot;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>将访问”/“（<code>http://localhost:8080/</code>）的请求“路由”到指定的handler。Handlers接收RoutingContext对象。这个handler的方法和我们之前的代码很像，他们操作的是同一个HttpServerResponse类型的对象。</p>
+<p>让我们来看看剩下的代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">vertx</div><div class="line">    .createHttpServer()</div><div class="line">    .requestHandler(router::accept)</div><div class="line">    .listen(</div><div class="line">        // Retrieve the port from the configuration,</div><div class="line">        // default to 8080.</div><div class="line">        config().getInteger(&quot;http.port&quot;, 8080),</div><div class="line">        result -&gt; &#123;</div><div class="line">          if (result.succeeded()) &#123;</div><div class="line">            fut.complete();</div><div class="line">          &#125; else &#123;</div><div class="line">            fut.fail(result.cause());</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">    );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>除了改变了request handler，基本和之前的代码一样。传<code>router::accept</code>给handler。你可能对这个符号不太熟悉。它表示引用一个方法（这里是引用<code>router</code>的<code>accept</code>方法）。换句话说，当接收到一个请求的时候，告诉vert.x从<code>router</code>里调用<code>accept</code>方法。</p>
+<p>让我们来看下它是怎么工作的：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">mvn clean package</div><div class="line">java -jar target/my-first-app-1.0-SNAPSHOT-fat.jar</div></pre></td></tr></table></figure>
+<p>浏览器打开<code>http://localhost:8080</code>，你会看到Hello的消息。</p>
+<h3 id="发布静态资源"><a href="#发布静态资源" class="headerlink" title="发布静态资源"></a>发布静态资源</h3><p>现在有了第一个使用Vert.x Web开发的应用。先在写增加一个index.html页面（静态资源）。</p>
+<p>这个HTML页面将会是我们应用的入口。在src/main/resources/assets目录下，index.html文件在<a href="https://github.com/cescoffier/my-vertx-first-app/blob/post-3/src/main/resources/assets/index.html" target="_blank" rel="external">github</a>上。此文不涉及这个文件的细节。</p>
+<p>基本上，就是一个简单的<code>CRUD</code>的UI界面，<code>actions</code>是由通过<code>AJAX</code>调用的<code>REST API</code>执行的。</p>
+<p>创建完了页面后，编辑name.quanke.study.vertx.first.MyFirstVerticle类，并修改start方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">@Override</div><div class="line">public void start(Future&lt;Void&gt; fut) &#123;</div><div class="line"> Router router = Router.router(vertx);</div><div class="line"> router.route(&quot;/&quot;).handler(routingContext -&gt; &#123;</div><div class="line">   HttpServerResponse response = routingContext.response();</div><div class="line">   response</div><div class="line">       .putHeader(&quot;content-type&quot;, &quot;text/html&quot;)</div><div class="line">       .end(&quot;&lt;h1&gt;Hello from my first Vert.x 3 application&lt;/h1&gt;&quot;);</div><div class="line"> &#125;);</div><div class="line"></div><div class="line"> // Serve static resources from the /assets directory</div><div class="line"> // 将访问“/assets/*”的请求route到“assets”目录下的资源</div><div class="line"> </div><div class="line"> router.route(&quot;/assets/*&quot;).handler(StaticHandler.create(&quot;assets&quot;));</div><div class="line"></div><div class="line"> vertx</div><div class="line">     .createHttpServer()</div><div class="line">     .requestHandler(router::accept)</div><div class="line">     .listen(</div><div class="line">         // Retrieve the port from the configuration,</div><div class="line">         // default to 8080.</div><div class="line">         config().getInteger(&quot;http.port&quot;, 8080),</div><div class="line">         result -&gt; &#123;</div><div class="line">           if (result.succeeded()) &#123;</div><div class="line">             fut.complete();</div><div class="line">           &#125; else &#123;</div><div class="line">             fut.fail(result.cause());</div><div class="line">           &#125;</div><div class="line">         &#125;</div><div class="line">     );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>就这段代码和前面的不同：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">router.route(&quot;/assets/*&quot;).handler(StaticHandler.create(&quot;assets&quot;));</div></pre></td></tr></table></figure>
+<p>这一行是什么意思？挺简单的。将访问“/assets/*”的请求route到“assets”目录下的资源。现在可以通过<code>http://localhost:8080/assets/index.html</code>来访问index.html了。</p>
+<p>测试之前，我们花一些时间来看一下handler的创建。所有的处理请求动作在Vert.x Web里都实现成handler。而创建一个handler需要调用<code>create</code>方法。</p>
+<p>编译、运行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">mvn clean package</div><div class="line">java -jar target/my-first-app-1.0-SNAPSHOT-fat.jar</div></pre></td></tr></table></figure>
+<p>浏览器，输入<code>http://localhost:8080/assets/index.html</code>。</p>
+<p>现在这个table是空的。那是因为我们还没有实现REST的API。现在让我们来开始吧。</p>
+<h3 id="使用Vert-x-Web实现REST-API"><a href="#使用Vert-x-Web实现REST-API" class="headerlink" title="使用Vert.x Web实现REST API"></a>使用Vert.x Web实现REST API</h3><p>Vert.x Web实现REST API很简单。看下面：</p>
+<ul>
+<li>GET /api/whiskies =&gt; 获取所有的威士忌（getAll）</li>
+<li>GET /api/whiskies/:id =&gt; 获取指定id的威士忌（getOne）</li>
+<li>POST /api/whiskies =&gt;添加一瓶威士忌（addOne）</li>
+<li>PUT /api/whiskies/:id =&gt; 编辑一瓶威士忌(updateOne)</li>
+<li>DELETE /api/whiskies/id =&gt; 删除一瓶威士忌(deleteOne)</li>
+</ul>
+<h5 id="我们需要一些数据。。。"><a href="#我们需要一些数据。。。" class="headerlink" title="我们需要一些数据。。。"></a>我们需要一些数据。。。</h5><p>在实现REST API之前，需要创建Whisky的数据模型。使用下面的内容创建<code>src/main/java/quanke/name/study/vertx/first/Whisky.java</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">package name.quanke.study.vertx.first;</div><div class="line"></div><div class="line">import java.util.concurrent.atomic.AtomicInteger;</div><div class="line"></div><div class="line">public class Whisky &#123;</div><div class="line"></div><div class="line">  private static final AtomicInteger COUNTER = new AtomicInteger();</div><div class="line"></div><div class="line">  private final int id;</div><div class="line"></div><div class="line">  private String name;</div><div class="line"></div><div class="line">  private String origin;</div><div class="line"></div><div class="line">  public Whisky(String name, String origin) &#123;</div><div class="line">    this.id = COUNTER.getAndIncrement();</div><div class="line">    this.name = name;</div><div class="line">    this.origin = origin;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public Whisky() &#123;</div><div class="line">    this.id = COUNTER.getAndIncrement();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public String getName() &#123;</div><div class="line">    return name;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public String getOrigin() &#123;</div><div class="line">    return origin;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public int getId() &#123;</div><div class="line">    return id;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public void setName(String name) &#123;</div><div class="line">    this.name = name;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public void setOrigin(String origin) &#123;</div><div class="line">    this.origin = origin;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是一个很简单的bean类。因为Vert.x依赖Jackson来处理JSON格式,Jackson能够自动序列化和反序列化bean类，让代码变得更简单，所以选择这样的格式。</p>
+<p>现在，创建几瓶威士忌。在MyFirstVerticle类中，添加下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">// Store our product</div><div class="line">// 存储产品</div><div class="line">private Map&lt;Integer, Whisky&gt; products = new LinkedHashMap&lt;&gt;();</div><div class="line">// Create some product</div><div class="line">// 创建一些产品</div><div class="line">private void createSomeData() &#123;</div><div class="line">  Whisky bowmore = new Whisky(&quot;Bowmore 15 Years Laimrig&quot;, &quot;Scotland, Islay&quot;);</div><div class="line">  products.put(bowmore.getId(), bowmore);</div><div class="line">  Whisky talisker = new Whisky(&quot;Talisker 57° North&quot;, &quot;Scotland, Island&quot;);</div><div class="line">  products.put(talisker.getId(), talisker);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后，在<code>start</code>方法里，调用<code>createSomeData</code>方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">@Override</div><div class="line">public void start(Future&lt;Void&gt; fut) &#123;</div><div class="line"></div><div class="line">  createSomeData();</div><div class="line"></div><div class="line">  // Create a router object.</div><div class="line">  Router router = Router.router(vertx);</div><div class="line"></div><div class="line">  // Rest of the method</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这里并没有一个后台数据库。仅使用一个map，将数据存储在内存中。添加后端数据库的介绍我准备放在另一篇文章中讲。</p>
+<h3 id="获得产品（威士忌）"><a href="#获得产品（威士忌）" class="headerlink" title="获得产品（威士忌）"></a>获得产品（威士忌）</h3><p><code>GET /api/whiskies</code>，JSON数组中返回产品列表。</p>
+<p>在<code>start</code>方法里，添加下面这行（static handler）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">router.get(&quot;/api/whiskies&quot;).handler(this::getAll);</div></pre></td></tr></table></figure>
+<p>告诉<code>router</code>调用<code>getAll</code>方法来处理<code>&quot;/api/whiskies&quot;</code>的GET请求。代码可以写在<code>handler</code>里，但是为了让代码更加清晰，另外创建一个方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void getAll(RoutingContext routingContext) &#123;</div><div class="line">  routingContext.response()</div><div class="line">      .putHeader(&quot;content-type&quot;, &quot;application/json; charset=utf-8&quot;)</div><div class="line">      .end(Json.encodePrettily(products.values()));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>每一个handler（比如：请看上面的代码）都会接受一个<code>RoutingContext</code>参数。通过设置<code>content-type</code>和一些内容来填充<code>response</code>。因为内容可能会碰到特殊的字符，所以强制使用UTF-8的格式。创建内容的时候，并不需要自己去处理JSON格式的字符串。Vert.x有处理Json的API。使用Json.encodePrettily(products.values())处理JSON字符串。本应使用Json.encodePrettily(products)，但是为了让JavaScript代码更简单，我们仅返回威士忌（产品）的数据集合，并没有返回包含<code>Id=&gt;Bottle</code>的键值对。</p>
+<p>打包运行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">mvn clean package</div><div class="line">java -jar target/my-first-app-1.0-SNAPSHOT-fat.jar</div></pre></td></tr></table></figure>
+<p>浏览器访问<code>http://localhost:8080/assets/index.html</code>，然后你将会看到下面这个页面。</p>
+<p><img src="http://vertx.io/assets/blog/intro-series/post-3-My_Whisky_Collection.png" alt="image"></p>
+<p>很好奇，想看一下REST API到底返回了什么。打开浏览器，访问<a href="http://localhost:8080/api/whiskies。你会看到下面这样的信息：" target="_blank" rel="external">http://localhost:8080/api/whiskies。你会看到下面这样的信息：</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">[ &#123;</div><div class="line">  &quot;id&quot; : 0,</div><div class="line">  &quot;name&quot; : &quot;Bowmore 15 Years Laimrig&quot;,</div><div class="line">  &quot;origin&quot; : &quot;Scotland, Islay&quot;</div><div class="line">&#125;, &#123;</div><div class="line">  &quot;id&quot; : 1,</div><div class="line">  &quot;name&quot; : &quot;Talisker 57° North&quot;,</div><div class="line">  &quot;origin&quot; : &quot;Scotland, Island&quot;</div><div class="line">&#125; ]</div></pre></td></tr></table></figure>
+<h3 id="创建一个产品"><a href="#创建一个产品" class="headerlink" title="创建一个产品"></a>创建一个产品</h3><p>能获取到威士忌（产品）了，现在需要创建一个产品。不像之前的REST API，这一次，需要读取<code>request</code>的<code>body</code>。因为性能的原因，它应该被显式地启用。不要怕，这也仅仅是一个<code>handler</code>而已。</p>
+<p>在<code>start</code>方法中，添加下面的内容到<code>getAll</code>的后面：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">router.route(&quot;/api/whiskies*&quot;).handler(BodyHandler.create());</div><div class="line">router.post(&quot;/api/whiskies&quot;).handler(this::addOne);</div></pre></td></tr></table></figure>
+<p>第一行允许<code>&quot;/api/whiskies&quot;</code>下的所有<code>route</code>读取请求的<code>body</code>。通过使用<code>router.route().handler(BodyHandler.create())</code>，能让它在全局生效。</p>
+<p>第二行将对<code>/api/whiskies</code>的POST请求映射到<code>addOne</code>方法。让我们来创建这个方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void addOne(RoutingContext routingContext) &#123;</div><div class="line">  final Whisky whisky = Json.decodeValue(routingContext.getBodyAsString(),</div><div class="line">      Whisky.class);</div><div class="line">  products.put(whisky.getId(), whisky);</div><div class="line">  routingContext.response()</div><div class="line">      .setStatusCode(201)</div><div class="line">      .putHeader(&quot;content-type&quot;, &quot;application/json; charset=utf-8&quot;)</div><div class="line">      .end(Json.encodePrettily(whisky));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>开始从请求的<code>body</code>中取出<code>Whisky</code>对象。只是将body读成一个字符串并将它传入到Json.decodeValue方法里。Whisky这个对象一旦创建好，将被添加到后台的map中，并以JSON的格式返回。</p>
+<p>重新编译并且运行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">mvn clean package</div><div class="line">java -jar target/my-first-app-1.0-SNAPSHOT-fat.jar</div></pre></td></tr></table></figure>
+<p>刷新HTML页面，点击<code>Add a new bottle</code>按钮。输入数据，如：<code>“quanke”</code> 作为名字， “quanke.name” 作为产地 ，就OK了。</p>
+<p><em>状态码 201 ？<br><code>CREATED</code>和在REST API中创建一个entity时，response的状态码为201。。默认的vert.x web设置一个200的状态码代表OK。</em></p>
+<h3 id="删除一个产品"><a href="#删除一个产品" class="headerlink" title="删除一个产品"></a>删除一个产品</h3><p>在<code>start</code>方法里，添加：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">router.delete(&quot;/api/whiskies/:id&quot;).handler(this::deleteOne);</div></pre></td></tr></table></figure>
+<p>在<code>URL</code>里，参数为：<code>:id</code>。在处理一个相匹配的请求的时候，Vert.x提取路径中与这个参数对应的一段，能够在handler中获得。例如，<code>/api/whiskies/0</code>将<code>id</code>映射为<code>0</code>。</p>
+<p>看一下在<code>handler</code>方法中这个参数是怎样被使用的。创建一个<code>deleteOne</code>方法。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void deleteOne(RoutingContext routingContext) &#123;</div><div class="line">  String id = routingContext.request().getParam(&quot;id&quot;);</div><div class="line">  if (id == null) &#123;</div><div class="line">    routingContext.response().setStatusCode(400).end();</div><div class="line">  &#125; else &#123;</div><div class="line">    Integer idAsInteger = Integer.valueOf(id);</div><div class="line">    products.remove(idAsInteger);</div><div class="line">  &#125;</div><div class="line">  routingContext.response().setStatusCode(204).end();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><em>状态码 204 ？<br>状态码为204 - NO CONTENT。HTTP delete动作通常都是无返回内容的。</em></p>
+<h3 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h3><p>实现getOne和updateOne很简单，和上面的差不多，此文不再详细介绍。源码在<a href="https://github.com/quanke/vertx3_study_demo/tree/master/my-vertx-first-app-rest" target="_blank" rel="external">github</a>上</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>此文介绍了如何用Vert.x web轻松的实现一个REST API，如何访问静态资源。比以前的文章复杂些，但仍然还是很简单。</p>
+
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">quanke.name</a>
+            
+        </div>
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/posts/60311/" class="pre-post btn btn-default"><i class="fa fa-angle-left fa-fw"></i>上一篇</a>
+    
+    
+        <a href="/posts/54943/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+	
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMzY4OS8xMDI0NA==">
+  <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+         if (typeof LivereTower === 'function') { return; }
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+  </script>
+</div>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">    
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢?">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget notification">
+        <h3 class="title">网站公告</h3>
+        <div>
+            <p>《Spring Boot 与 kotlin 实战》 系列教程上线<br/>
+专题：<a href="http://quanke.name/spring-boot-with-kotlin-in-action" title="fork me" target="_blank">《Spring Boot 与 kotlin 实战》</a> <br/>
+<hr>
+<img  width="100%" align="center" src="https://static.oschina.net/uploads/img/201711/08183543_ysUa.jpg">
+<hr>
+QQ交流群：370156529
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/quanke" rel="external nofollow" title="Github" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:caiquanke_88@163.com" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="//weibo.com/quankecai" rel="external nofollow" title="微博" target="_blank">
+			    	<i class="weibo fa fa-weibo"></i>
+			    </a>
+            
+	            <a href="//jq.qq.com/?_wv=1027&k=5MOKtIE" rel="external nofollow" title="QQ群" target="_blank">
+			    	<i class="users fa fa-users"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/es/"><i class="fa" aria-hidden="true">Elasticsearch</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/golang/"><i class="fa" aria-hidden="true">Go语言</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MBaaS-LiveOak系列/"><i class="fa" aria-hidden="true">MBaaS-LiveOak系列</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/rn/"><i class="fa" aria-hidden="true">React Native</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-Boot与kotlin实战/"><i class="fa" aria-hidden="true">Spring Boot与kotlin实战</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vertx/"><i class="fa" aria-hidden="true">Vert.x3 系列</i></a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/"><i class="fa" aria-hidden="true">android开发</i></a><span class="category-list-count">54</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/"><i class="fa" aria-hidden="true">git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ios/"><i class="fa" aria-hidden="true">ios开发</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/"><i class="fa" aria-hidden="true">node.js</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/use/"><i class="fa" aria-hidden="true">使用</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/bdata/"><i class="fa" aria-hidden="true">大数据</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/service/"><i class="fa" aria-hidden="true">服务端开发</i></a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/autotest/"><i class="fa" aria-hidden="true">自动化测试</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gof/"><i class="fa" aria-hidden="true">设计模式</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/se/"><i class="fa" aria-hidden="true">软件工程</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/essay/"><i class="fa" aria-hidden="true">随笔</i></a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/project/"><i class="fa" aria-hidden="true">项目实战</i></a><span class="category-list-count">1</span></li></ul>
+    </div>
+
+
+        
+        
+    <div class="widget">
+      <h3 class="title">归档</h3>
+        <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/"><i class="fa" aria-hidden="true">二月 2018</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">十二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/"><i class="fa" aria-hidden="true">十一月 2017</i></a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/"><i class="fa" aria-hidden="true">二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/"><i class="fa" aria-hidden="true">十月 2016</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/"><i class="fa" aria-hidden="true">七月 2016</i></a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/"><i class="fa" aria-hidden="true">五月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/"><i class="fa" aria-hidden="true">四月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/"><i class="fa" aria-hidden="true">一月 2016</i></a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/"><i class="fa" aria-hidden="true">八月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/"><i class="fa" aria-hidden="true">七月 2015</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/"><i class="fa" aria-hidden="true">五月 2015</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/"><i class="fa" aria-hidden="true">四月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/"><i class="fa" aria-hidden="true">十一月 2014</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/"><i class="fa" aria-hidden="true">六月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/"><i class="fa" aria-hidden="true">二月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/"><i class="fa" aria-hidden="true">一月 2013</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/"><i class="fa" aria-hidden="true">十二月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/"><i class="fa" aria-hidden="true">十一月 2012</i></a><span class="archive-list-count">40</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/"><i class="fa" aria-hidden="true">十月 2012</i></a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/"><i class="fa" aria-hidden="true">九月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/"><i class="fa" aria-hidden="true">八月 2012</i></a><span class="archive-list-count">4</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        <a href="/tags/API/" style="font-size: 13.33px;">API</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/android-pg/" style="font-size: 10px;">Android多渠道打包</a> <a href="/tags/es/" style="font-size: 16.67px;">Elasticsearch</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IOS/" style="font-size: 10px;">IOS</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/th-java/" style="font-size: 10px;">Java 编程思想</a> <a href="/tags/JavaEE/" style="font-size: 10px;">JavaEE</a> <a href="/tags/LiveOak/" style="font-size: 13.33px;">LiveOak</a> <a href="/tags/MBaaS/" style="font-size: 15px;">MBaaS</a> <a href="/tags/PM2/" style="font-size: 10px;">PM2</a> <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/rn/" style="font-size: 10px;">React Native</a> <a href="/tags/SDK/" style="font-size: 10px;">SDK</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/vertx-for-java/" style="font-size: 10px;">Vert.x Core手册 for Java</a> <a href="/tags/Vert-x3/" style="font-size: 20px;">Vert.x3</a> <a href="/tags/Vertx/" style="font-size: 20px;">Vertx</a> <a href="/tags/windows-install/" style="font-size: 10px;">Windows10安装</a> <a href="/tags/android/" style="font-size: 18.33px;">android</a> <a href="/tags/android-a/" style="font-size: 10px;">android动画</a> <a href="/tags/elasticsearch/" style="font-size: 11.67px;">elasticsearch</a> <a href="/tags/gitbook/" style="font-size: 10px;">gitbook</a> <a href="/tags/ios/" style="font-size: 10px;">ios</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/tags/logstash/" style="font-size: 11.67px;">logstash</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node-js-运行/" style="font-size: 10px;">node.js 运行</a> <a href="/tags/spirng-boot/" style="font-size: 10px;">spirng boot</a> <a href="/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/tags/swagger-ui/" style="font-size: 10px;">swagger ui</a> <a href="/tags/swagger-api/" style="font-size: 10px;">swagger-api</a> <a href="/tags/swagger-edit/" style="font-size: 10px;">swagger-edit</a> <a href="/tags/bdaga/" style="font-size: 16.67px;">大数据</a> <a href="/tags/opensouce/" style="font-size: 10px;">开源</a> <a href="/tags/conclusion/" style="font-size: 10px;">总结</a> <a href="/tags/api/" style="font-size: 10px;">接口文档</a> <a href="/tags/careful/" style="font-size: 10px;">注意</a> <a href="/tags/career-planning/" style="font-size: 10px;">职业规划</a> <a href="/tags/autotest/" style="font-size: 10px;">自动化测试</a> <a href="/tags/gof/" style="font-size: 10px;">设计模式</a> <a href="/tags/data/" style="font-size: 11.67px;">资料</a> <a href="/tags/test/" style="font-size: 10px;">软件测试</a>
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://quanke.name" class="fa" target="_blank">我全科博客</a>
+        
+            <a href="http://satra.gitee.io/blog/" class="fa" target="_blank">我在万达摆地摊</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12"> 
+                <span>Copyright &copy; 2017
+                </span> | 
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> | 
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+	<script src="/js/search.js?rev=@@hash"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+
+</body>
+</html>

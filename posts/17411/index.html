@@ -1,0 +1,471 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="全科-不安分的码农">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://quanke.name">
+    <!--SEO-->
+
+
+
+
+
+<meta name="robots" content="all" />
+<meta name="google" content="all" />
+<meta name="googlebot" content="all" />
+<meta name="verify" content="all" />
+    <!--Title-->
+
+
+<title>Spring Boot与Kotlin  整合全文搜索引擎Elasticsearch | 全科-不安分的码农</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="全科-不安分的码农" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css?rev=3.3.4">
+<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?853906ed403c461b2dbf1df696bdf998";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+	<script>
+		(function(i, s, o, g, r, a, m) {
+		    i['GoogleAnalyticsObject'] = r;
+		    i[r] = i[r] || function() {
+		        (i[r].q = i[r].q || []).push(arguments)
+		    }, i[r].l = 1 * new Date();
+		    a = s.createElement(o),
+		    m = s.getElementsByTagName(o)[0];
+		    a.async = 1;
+		    a.src = g;
+		    m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-82833335-5', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+
+    
+</head>
+
+
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header"  style="background-image:url(http://7xpw2b.com1.z0.glb.clouddn.com/hexo-sinppet/img/banner2.jpg)"  >
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="">
+            <img src="/img/avatar.jpg" alt="logo头像">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                 <img src="/img/branding.png" alt="Snippet 博客主题">  
+             
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                    </span>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>主页</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/free-books"><i class="fa fa-fw "></i>开源书籍</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>应用</a>
+                            </li>
+                        
+                            <li role="presentation"><a href="/"><i class="fa fa-fw "></i>开源</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Spring Boot与Kotlin  整合全文搜索引擎Elasticsearch">
+            
+	            Spring Boot与Kotlin  整合全文搜索引擎Elasticsearch
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <span>Spring Boot与kotlin实战</span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            kotlin
+            
+        </span>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">2018/02/03</span>
+    </span>
+</div>
+
+            
+            
+    </div>
+    
+    <div class="post-body post-content">
+        <p>Elasticsearch 在全文搜索里面基本是无敌的，在大数据里面也很有建树，完全可以当nosql（本来也是nosql）使用。</p>
+<p>这篇文章简单介绍Spring Boot使用Kotlin语言连接操作 Elasticsearch。但是不会做很详细的介绍，如果要深入了解Elasticsearch在Java/kotlin中的使用，请参考我之前编写的《Elasticsearch Java API 手册》 <a href="https://gitee.com/quanke/elasticsearch-java/" target="_blank" rel="external">https://gitee.com/quanke/elasticsearch-java/</a> 里面包含使用实例，包含我们使用踩过的坑。</p>
+<blockquote>
+<p>如果完全不了解Elasticsearch请先了解，安装好Elasticsearch服务</p>
+</blockquote>
+<p>有多种方式连接Elasticsearch</p>
+<ul>
+<li>Spring Data Elasticsearch</li>
+<li>elasticsearch Java client</li>
+<li>其他第三方库</li>
+</ul>
+<p>需要注意的是，如果使用Spring Data Elasticsearch，spring boot 1.5++版本的不支持最新版本的elasticsearch。</p>
+<p>下面是spring data elasticsearch 和elasticsearch对应的版本</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">spring data elasticsearch</th>
+<th style="text-align:center">elasticsearch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">3.0.0.RC2</td>
+<td style="text-align:center">5.5.0</td>
+</tr>
+<tr>
+<td style="text-align:center">3.0.0.M4</td>
+<td style="text-align:center">5.4.0</td>
+</tr>
+<tr>
+<td style="text-align:center">2.0.4.RELEASE</td>
+<td style="text-align:center">2.4.0</td>
+</tr>
+<tr>
+<td style="text-align:center">2.0.0.RELEASE</td>
+<td style="text-align:center">2.2.0</td>
+</tr>
+<tr>
+<td style="text-align:center">1.4.0.M1</td>
+<td style="text-align:center">1.7.3</td>
+</tr>
+<tr>
+<td style="text-align:center">1.3.0.RELEASE</td>
+<td style="text-align:center">1.5.2</td>
+</tr>
+<tr>
+<td style="text-align:center">1.2.0.RELEASE</td>
+<td style="text-align:center">1.4.4</td>
+</tr>
+<tr>
+<td style="text-align:center">1.1.0.RELEASE</td>
+<td style="text-align:center">1.3.2</td>
+</tr>
+<tr>
+<td style="text-align:center">1.0.0.RELEASE</td>
+<td style="text-align:center">1.1.1</td>
+</tr>
+</tbody>
+</table>
+<p>我们使用的<code>Elasticsearch</code>版本是<code>5.5.6</code>，<code>spring boot</code> 使用的版本是<code>1.5.6</code> 而且支持<code>Elasticsearch5.0</code>以上的版本的<code>spring data elasticsearch</code>还不是<code>RELEASE</code>版本，所有我们采用的是<code>elasticsearch Java client</code>的方式,但是现在官方推荐更好的方式可以参考我写的《Elasticsearch Java Rest API 手册》 <a href="https://gitee.com/quanke/elasticsearch-java-rest，但是这篇文章还是使用`elasticsearch" target="_blank" rel="external">https://gitee.com/quanke/elasticsearch-java-rest，但是这篇文章还是使用`elasticsearch</a> Java client`</p>
+<h2 id="构建Spring-Boot-Kotlin-项目"><a href="#构建Spring-Boot-Kotlin-项目" class="headerlink" title="构建Spring Boot Kotlin 项目"></a>构建Spring Boot Kotlin 项目</h2><blockquote>
+<p>如果构建项目有问题的您，可以参考我之前的文章《使用Spring Boot和Kotlin创建RESTfull API》</p>
+</blockquote>
+<p>使用<code>Gradle</code>构建,在<code>build.gradle</code>文件中添加</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    compile &quot;org.elasticsearch:elasticsearch:$elasticsearch_version&quot;</div><div class="line">    compile &quot;org.elasticsearch.client:transport:$elasticsearch_version&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>完整的<code>build.gradle</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">group &apos;name.quanke.kotlin&apos;</div><div class="line">version &apos;1.0-SNAPSHOT&apos;</div><div class="line"></div><div class="line">buildscript &#123;</div><div class="line">    ext.kotlin_version = &apos;1.2.10&apos;</div><div class="line">    ext.spring_boot_version = &apos;1.5.4.RELEASE&apos;</div><div class="line">    ext.springfox_swagger2_version = &apos;2.7.0&apos;</div><div class="line">    ext.mysql_version = &apos;5.1.21&apos;</div><div class="line">    ext.mybatis_version = &apos;1.1.1&apos;</div><div class="line">    ext.elasticsearch_version = &apos;5.5.1&apos;</div><div class="line">    ext.fastjson_version = &apos;1.2.7&apos;</div><div class="line">    repositories &#123;</div><div class="line">        mavenCentral()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath &quot;org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version&quot;</div><div class="line">        classpath(&quot;org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version&quot;)</div><div class="line"></div><div class="line">//        Kotlin整合SpringBoot的默认无参构造函数，默认把所有的类设置open类插件</div><div class="line">        classpath(&quot;org.jetbrains.kotlin:kotlin-noarg:$kotlin_version&quot;)</div><div class="line">        classpath(&quot;org.jetbrains.kotlin:kotlin-allopen:$kotlin_version&quot;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">apply plugin: &apos;kotlin&apos;</div><div class="line">apply plugin: &quot;kotlin-spring&quot; // See https://kotlinlang.org/docs/reference/compiler-plugins.html#kotlin-spring-compiler-plugin</div><div class="line">apply plugin: &apos;org.springframework.boot&apos;</div><div class="line">apply plugin: &quot;kotlin-jpa&quot;  //https://stackoverflow.com/questions/32038177/kotlin-with-jpa-default-constructor-hell</div><div class="line">jar &#123;</div><div class="line">    baseName = &apos;chapter11-6-8-service&apos;</div><div class="line">    version = &apos;0.1.0&apos;</div><div class="line">&#125;</div><div class="line">repositories &#123;</div><div class="line">    mavenCentral()</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line">    compile &quot;org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version&quot;</div><div class="line">    compile(&quot;org.jetbrains.kotlin:kotlin-reflect:$&#123;kotlin_version&#125;&quot;)</div><div class="line"></div><div class="line">    compile &quot;org.springframework.boot:spring-boot-starter-web:$spring_boot_version&quot;</div><div class="line">    compile &quot;org.elasticsearch:elasticsearch:$elasticsearch_version&quot;</div><div class="line">    compile &quot;org.elasticsearch.client:transport:$elasticsearch_version&quot;</div><div class="line">    compile &quot;com.alibaba:fastjson:$fastjson_version&quot;</div><div class="line">    compile &quot;org.apache.commons:commons-lang3:3.6&quot;</div><div class="line"></div><div class="line"></div><div class="line">    testCompile &quot;org.springframework.boot:spring-boot-starter-test:$spring_boot_version&quot;</div><div class="line">    testCompile &quot;org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version&quot;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">compileKotlin &#123;</div><div class="line">    kotlinOptions.jvmTarget = &quot;1.8&quot;</div><div class="line">&#125;</div><div class="line">compileTestKotlin &#123;</div><div class="line">    kotlinOptions.jvmTarget = &quot;1.8&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>先写测试基类<code>ElasticsearchClient</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"></div><div class="line">import com.alibaba.fastjson.JSON</div><div class="line">import com.alibaba.fastjson.serializer.SerializerFeature</div><div class="line">import org.elasticsearch.action.search.SearchResponse</div><div class="line">import org.elasticsearch.client.transport.TransportClient</div><div class="line">import org.elasticsearch.common.settings.Settings</div><div class="line">import org.elasticsearch.common.transport.InetSocketTransportAddress</div><div class="line">import org.elasticsearch.transport.client.PreBuiltTransportClient</div><div class="line">import org.junit.After</div><div class="line">import org.junit.Before</div><div class="line"></div><div class="line">import java.net.InetAddress</div><div class="line"></div><div class="line">/**</div><div class="line"> * Elasticsearch 5.5.1 的client 和 ElasticsearchTemplate的初始化</div><div class="line"> * 作为一个外部访问者，请求ES的集群，对于集群而言，它是一个外部因素。</div><div class="line"> * Created by http://quanke.name on 2017/11/10.</div><div class="line"> */</div><div class="line">open class ElasticsearchClient &#123;</div><div class="line"></div><div class="line">    protected var client: TransportClient? = null</div><div class="line"></div><div class="line">    @Before</div><div class="line">    @Throws(Exception::class)</div><div class="line">    fun setUp() &#123;</div><div class="line"></div><div class="line">        val esSettings = Settings.builder()</div><div class="line">                .put(&quot;cluster.name&quot;, &quot;utan-es&quot;) //设置ES实例的名称</div><div class="line">                .put(&quot;client.transport.sniff&quot;, true) //自动嗅探整个集群的状态，把集群中其他ES节点的ip添加到本地的客户端列表中</div><div class="line">                .build()</div><div class="line"></div><div class="line">        /**</div><div class="line">         * 这里的连接方式指的是没有安装x-pack插件,如果安装了x-pack则参考 [ElasticsearchXPackClient]</div><div class="line">         * 1. java客户端的方式是以tcp协议在9300端口上进行通信</div><div class="line">         * 2. http客户端的方式是以http协议在9200端口上进行通信</div><div class="line">         */</div><div class="line">        client = PreBuiltTransportClient(esSettings)</div><div class="line">                .addTransportAddress(InetSocketTransportAddress(InetAddress.getByName(&quot;192.168.1.10&quot;), 9300))</div><div class="line"></div><div class="line">        println(&quot;ElasticsearchClient 连接成功&quot;)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @After</div><div class="line">    @Throws(Exception::class)</div><div class="line">    fun tearDown() &#123;</div><div class="line">        if (client != null) &#123;</div><div class="line">            client!!.close()</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    protected fun println(searchResponse: SearchResponse) &#123;</div><div class="line">        val searchHits = searchResponse.hits.hits</div><div class="line">        for (searchHit in searchHits) &#123;</div><div class="line">            println(JSON.toJSONString(searchHit.source, SerializerFeature.PrettyFormat))</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行单元测试</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">import org.elasticsearch.index.query.QueryBuilders.matchAllQuery</div><div class="line">import org.junit.Test</div><div class="line">import org.junit.runner.RunWith</div><div class="line">import org.springframework.boot.test.context.SpringBootTest</div><div class="line">import org.springframework.test.context.junit4.SpringRunner</div><div class="line"></div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by http://quanke.name on 2018/1/9.</div><div class="line"> */</div><div class="line">@RunWith(SpringRunner::class)</div><div class="line">@SpringBootTest</div><div class="line">class ApplicationTests : ElasticsearchClient() &#123;</div><div class="line"></div><div class="line">    @Test</div><div class="line">    fun `es  test&quot;`() &#123;</div><div class="line"></div><div class="line">        val qb = matchAllQuery()</div><div class="line"></div><div class="line">        val response = client!!.prepareSearch(&quot;twitter&quot;)//可以是多个index</div><div class="line">                .setTypes(&quot;tweet&quot;)//可以是多个类型</div><div class="line">                .setQuery(qb)    // Query 查询条件</div><div class="line">                .get()</div><div class="line"></div><div class="line">        println(response)</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们写了一个<code>dayu-spring-boot-starter-es</code> ,有机会开源出来</p>
+<p>更多Spring Boot 和 kotlin相关内容</p>
+<p>欢迎关注<a href="https://www.jianshu.com/c/e6dbcad79e75" target="_blank" rel="external">《Spring Boot 与 kotlin 实战》</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://gitee.com/quanke/elasticsearch-java-rest" target="_blank" rel="external">https://gitee.com/quanke/elasticsearch-java-rest</a></li>
+<li><a href="https://gitee.com/quanke/elasticsearch-java" target="_blank" rel="external">https://gitee.com/quanke/elasticsearch-java</a></li>
+</ul>
+<p>欢迎关注：</p>
+<p><a href="http://quanke.name/spring-boot-with-kotlin-in-action">《Spring Boot in kotlin 实战》</a></p>
+
+    </div>
+
+    <div class="post-footer">   
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">quanke.name</a>
+            
+        </div>
+        <div>
+            
+        </div>  
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/posts/30080/" class="pre-post btn btn-default"><i class="fa fa-angle-left fa-fw"></i>上一篇</a>
+    
+    
+        <a href="/posts/42854/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
+    
+</div>
+
+
+    <div id="comments">
+        
+	
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMzY4OS8xMDI0NA==">
+  <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+         if (typeof LivereTower === 'function') { return; }
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+  </script>
+</div>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">    
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢?">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget notification">
+        <h3 class="title">网站公告</h3>
+        <div>
+            <p>《Spring Boot 与 kotlin 实战》 系列教程上线<br/>
+专题：<a href="http://quanke.name/spring-boot-with-kotlin-in-action" title="fork me" target="_blank">《Spring Boot 与 kotlin 实战》</a> <br/>
+<hr>
+<img  width="100%" align="center" src="https://static.oschina.net/uploads/img/201711/08183543_ysUa.jpg">
+<hr>
+QQ交流群：370156529
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/quanke" rel="external nofollow" title="Github" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:caiquanke_88@163.com" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="//weibo.com/quankecai" rel="external nofollow" title="微博" target="_blank">
+			    	<i class="weibo fa fa-weibo"></i>
+			    </a>
+            
+	            <a href="//jq.qq.com/?_wv=1027&k=5MOKtIE" rel="external nofollow" title="QQ群" target="_blank">
+			    	<i class="users fa fa-users"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/es/"><i class="fa" aria-hidden="true">Elasticsearch</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/golang/"><i class="fa" aria-hidden="true">Go语言</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MBaaS-LiveOak系列/"><i class="fa" aria-hidden="true">MBaaS-LiveOak系列</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/rn/"><i class="fa" aria-hidden="true">React Native</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring-Boot与kotlin实战/"><i class="fa" aria-hidden="true">Spring Boot与kotlin实战</i></a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vertx/"><i class="fa" aria-hidden="true">Vert.x3 系列</i></a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/"><i class="fa" aria-hidden="true">android开发</i></a><span class="category-list-count">54</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/"><i class="fa" aria-hidden="true">git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ios/"><i class="fa" aria-hidden="true">ios开发</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/"><i class="fa" aria-hidden="true">node.js</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/use/"><i class="fa" aria-hidden="true">使用</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/bdata/"><i class="fa" aria-hidden="true">大数据</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/service/"><i class="fa" aria-hidden="true">服务端开发</i></a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/autotest/"><i class="fa" aria-hidden="true">自动化测试</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gof/"><i class="fa" aria-hidden="true">设计模式</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/se/"><i class="fa" aria-hidden="true">软件工程</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/essay/"><i class="fa" aria-hidden="true">随笔</i></a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/project/"><i class="fa" aria-hidden="true">项目实战</i></a><span class="category-list-count">1</span></li></ul>
+    </div>
+
+
+        
+        
+    <div class="widget">
+      <h3 class="title">归档</h3>
+        <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/"><i class="fa" aria-hidden="true">二月 2018</i></a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/"><i class="fa" aria-hidden="true">十二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/"><i class="fa" aria-hidden="true">十一月 2017</i></a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/"><i class="fa" aria-hidden="true">二月 2017</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/"><i class="fa" aria-hidden="true">十月 2016</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/"><i class="fa" aria-hidden="true">七月 2016</i></a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/"><i class="fa" aria-hidden="true">五月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/"><i class="fa" aria-hidden="true">四月 2016</i></a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/"><i class="fa" aria-hidden="true">一月 2016</i></a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/"><i class="fa" aria-hidden="true">八月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/"><i class="fa" aria-hidden="true">七月 2015</i></a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/"><i class="fa" aria-hidden="true">五月 2015</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/"><i class="fa" aria-hidden="true">四月 2015</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/"><i class="fa" aria-hidden="true">十一月 2014</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/"><i class="fa" aria-hidden="true">六月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/"><i class="fa" aria-hidden="true">二月 2014</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/"><i class="fa" aria-hidden="true">一月 2013</i></a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/"><i class="fa" aria-hidden="true">十二月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/"><i class="fa" aria-hidden="true">十一月 2012</i></a><span class="archive-list-count">40</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/"><i class="fa" aria-hidden="true">十月 2012</i></a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/"><i class="fa" aria-hidden="true">九月 2012</i></a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/"><i class="fa" aria-hidden="true">八月 2012</i></a><span class="archive-list-count">4</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        <a href="/tags/API/" style="font-size: 12.86px;">API</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/android-pg/" style="font-size: 10px;">Android多渠道打包</a> <a href="/tags/es/" style="font-size: 15.71px;">Elasticsearch</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IOS/" style="font-size: 10px;">IOS</a> <a href="/tags/JAVA/" style="font-size: 10px;">JAVA</a> <a href="/tags/Java/" style="font-size: 14.29px;">Java</a> <a href="/tags/th-java/" style="font-size: 10px;">Java 编程思想</a> <a href="/tags/JavaEE/" style="font-size: 10px;">JavaEE</a> <a href="/tags/LiveOak/" style="font-size: 12.86px;">LiveOak</a> <a href="/tags/MBaaS/" style="font-size: 14.29px;">MBaaS</a> <a href="/tags/PM2/" style="font-size: 10px;">PM2</a> <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/rn/" style="font-size: 10px;">React Native</a> <a href="/tags/SDK/" style="font-size: 10px;">SDK</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/vertx-for-java/" style="font-size: 10px;">Vert.x Core手册 for Java</a> <a href="/tags/Vert-x3/" style="font-size: 18.57px;">Vert.x3</a> <a href="/tags/Vertx/" style="font-size: 18.57px;">Vertx</a> <a href="/tags/windows-install/" style="font-size: 10px;">Windows10安装</a> <a href="/tags/android/" style="font-size: 17.14px;">android</a> <a href="/tags/android-a/" style="font-size: 10px;">android动画</a> <a href="/tags/elasticsearch/" style="font-size: 11.43px;">elasticsearch</a> <a href="/tags/gitbook/" style="font-size: 10px;">gitbook</a> <a href="/tags/ios/" style="font-size: 10px;">ios</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/kotlin/" style="font-size: 20px;">kotlin</a> <a href="/tags/logstash/" style="font-size: 11.43px;">logstash</a> <a href="/tags/mysql/" style="font-size: 11.43px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node-js-运行/" style="font-size: 10px;">node.js 运行</a> <a href="/tags/spirng-boot/" style="font-size: 10px;">spirng boot</a> <a href="/tags/spring-boot/" style="font-size: 20px;">spring boot</a> <a href="/tags/swagger-ui/" style="font-size: 10px;">swagger ui</a> <a href="/tags/swagger-api/" style="font-size: 10px;">swagger-api</a> <a href="/tags/swagger-edit/" style="font-size: 10px;">swagger-edit</a> <a href="/tags/bdaga/" style="font-size: 15.71px;">大数据</a> <a href="/tags/opensouce/" style="font-size: 10px;">开源</a> <a href="/tags/conclusion/" style="font-size: 10px;">总结</a> <a href="/tags/api/" style="font-size: 10px;">接口文档</a> <a href="/tags/careful/" style="font-size: 10px;">注意</a> <a href="/tags/career-planning/" style="font-size: 10px;">职业规划</a> <a href="/tags/autotest/" style="font-size: 10px;">自动化测试</a> <a href="/tags/gof/" style="font-size: 10px;">设计模式</a> <a href="/tags/data/" style="font-size: 11.43px;">资料</a> <a href="/tags/test/" style="font-size: 10px;">软件测试</a>
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://quanke.name" class="fa" target="_blank">我全科博客</a>
+        
+            <a href="http://satra.gitee.io/blog/" class="fa" target="_blank">我在万达摆地摊</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12"> 
+                <span>Copyright &copy; 2017
+                </span> | 
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> | 
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+	<script src="/js/search.js?rev=@@hash"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+
+</body>
+</html>

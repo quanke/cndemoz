@@ -27,7 +27,7 @@
     <!--Title-->
 
 
-<title>Android View如何获取焦点 | 全科-不安分的码农</title>
+<title>专题文章 | 全科-不安分的码农</title>
 
 
     <link rel="alternate" href="/atom.xml" title="全科-不安分的码农" type="application/atom+xml">
@@ -138,103 +138,20 @@
     <section class="content-wrap">
         <div class="container">
             <div class="row">
-                <main class="col-md-8 main-content m-post">
-                    <p id="process"></p>
-<article class="post">
-    <div class="post-head">
-        <h1 id="Android View如何获取焦点">
-            
-	            Android View如何获取焦点
-            
-        </h1>
-        <div class="post-meta">
-    
-    
-    <span class="categories-meta fa-wrap">
-        <i class="fa fa-folder-open-o"></i>
-        <span>android开发</span>
-    </span>
-    
-    
-    <span class="fa-wrap">
-        <i class="fa fa-tags"></i>
-        <span class="tags-meta">
-            
-            null
-            
-        </span>
-    </span>
-    
-    
-    <span class="fa-wrap">
-        <i class="fa fa-clock-o"></i>
-        <span class="date-meta">2012/11/03</span>
-    </span>
-</div>
-
-            
-            
-            <p class="fa fa-exclamation-triangle warning">
-                本文于<strong>1918</strong>天之前发表，文中内容可能已经过时。
-            </p>
-        
-    </div>
-    
-    <div class="post-body post-content">
-        <p> Android新启动Activity，dialog或者其他窗体中中包含EditText， 新启动的activity的焦点默认在EditText上，这是android系统会弹出软键盘，挤压activity本来的界面，影响美观。</p>
-<pre><code>因此最好在新窗体创建时，最好在onCreate()方法中将焦点放在另一个view上.  view使用requestFocus()焦点，但是如果让button或者textView之类控件直接使用requestFocus()方法，则无法获取焦点，焦点会依然在editText上。
-
-只能在使用View的requestFocus()方法之前调用下面2个方法，view才可获取焦点:
-</code></pre><p> [code lang=”java”]<br> 　　　　view.setFocusable(true);</p>
-<p> 　　　　view.setFocusableInTouchMode(true);<br> [/code]<br> 　　然后调用 requestFocus()即可获取焦点。</p>
-
-    </div>
-
-    <div class="post-footer">   
-        <div>
-            
-                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">quanke.name</a>
-            
-        </div>
-        <div>
-            
-        </div>  
-    </div>
-</article>
-
-<div class="article-nav prev-next-wrap clearfix">
-    
-        <a href="/posts/49391/" class="pre-post btn btn-default"><i class="fa fa-angle-left fa-fw"></i>上一篇</a>
-    
-    
-        <a href="/posts/48895/" class="next-post btn btn-default">下一篇<i class="fa fa-angle-right fa-fw"></i></a>
-    
-</div>
-
-
-    <div id="comments">
-        
+                <main class="col-md-8 main-content ">
+                    <div class="about">
 	
-<div id="lv-container" data-id="city" data-uid="MTAyMC8zMzY4OS8xMDI0NA==">
-  <script type="text/javascript">
-     (function(d, s) {
-         var j, e = d.getElementsByTagName(s)[0];
-         if (typeof LivereTower === 'function') { return; }
-         j = d.createElement(s);
-         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-         j.async = true;
-         e.parentNode.insertBefore(j, e);
-     })(document, 'script');
-  </script>
+	    <article class="post">
+	        <h1 class="post-head">专题文章</h1>
+	        <div class="post-body">
+	            <ul>
+<li><a href="http://quanke.name/spring-boot-with-kotlin-in-action">《Spring Boot 与 kotlin 实战》 </a></li>
+</ul>
+
+	        </div>
+	    </article>
+	
 </div>
-
-
-    </div>
-
-
-
-
-
                 </main>
                 
     <aside class="col-md-4 sidebar">
